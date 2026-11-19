@@ -1,5 +1,5 @@
 # Gera Prumo.xcodeproj no macOS:  brew install xcodegen && xcodegen generate
-# Debug assina no modo automático; Release usa os perfis Ad Hoc "Prumo app" e "Prumo widget".
+# Debug assina no modo automático; Release usa os perfis de PRUMO_PERFIL_APP e PRUMO_PERFIL_WIDGET.
 name: Prumo
 options:
   bundleIdPrefix: br.prumo
@@ -15,6 +15,9 @@ settings:
     CODE_SIGN_STYLE: Automatic
     PRUMO_BUNDLE_ID: br.prumo.app
     PRUMO_APP_GROUP: group.br.prumo.app
+    # Perfis usados em Release. O CI troca pelos perfis App Store ao enviar ao TestFlight.
+    PRUMO_PERFIL_APP: Prumo app
+    PRUMO_PERFIL_WIDGET: Prumo Widget
     MARKETING_VERSION: "0.1.0"
     CURRENT_PROJECT_VERSION: "1"
     SWIFT_VERSION: "5.0"
@@ -51,7 +54,7 @@ targets:
         Release:
           CODE_SIGN_STYLE: Manual
           CODE_SIGN_IDENTITY: Apple Distribution
-          PROVISIONING_PROFILE_SPECIFIER: Prumo app
+          PROVISIONING_PROFILE_SPECIFIER: $(PRUMO_PERFIL_APP)
 
   PrumoWidgetExtension:
     type: app-extension
@@ -77,7 +80,7 @@ targets:
         Release:
           CODE_SIGN_STYLE: Manual
           CODE_SIGN_IDENTITY: Apple Distribution
-          PROVISIONING_PROFILE_SPECIFIER: Prumo widget
+          PROVISIONING_PROFILE_SPECIFIER: $(PRUMO_PERFIL_WIDGET)
 
 schemes:
   Prumo:

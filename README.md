@@ -53,7 +53,7 @@ O App Group é lido do `Info.plist` (`PrumoAppGroup`) pelo app e pela extensão,
 `.github/workflows/ios.yml` tem três jobs:
 
 - **PrumoKit (Linux)** e **App e widget (simulador)**: em todo push na `main` e em pull requests. Compilam sem assinatura.
-- **IPA assinado (Ad Hoc)**: só em disparo manual (Actions › iOS › Run workflow) ou em tag `v*`, nunca em pull request. Monta um keychain temporário, instala os perfis, arquiva em Release e publica o `.ipa` como artefato por 14 dias.
+- **Build assinado**: só em disparo manual (Actions › iOS › Run workflow, escolhendo `testflight` ou `adhoc`) ou em tag `v*` (vai ao TestFlight), nunca em pull request. Monta um keychain temporário, instala os perfis, arquiva em Release, exporta e publica o `.ipa` como artefato por 14 dias. Em `testflight`, envia o build ao App Store Connect com a chave da API. O número do build é `run_number × 10 + tentativa`.
 
 ### Assinatura
 
@@ -63,8 +63,12 @@ Certificado, chave e perfis ficam fora do repositório (o `.gitignore` bloqueia 
 |---|---|
 | `IOS_DIST_CERT_BASE64` | `distribution.cer` (Apple Distribution) |
 | `IOS_DIST_KEY_BASE64` | `prumo-distribution.key` |
-| `IOS_PROFILE_APP_BASE64` | `Prumo_app.mobileprovision` |
-| `IOS_PROFILE_WIDGET_BASE64` | `Prumo_widget.mobileprovision` |
+| `IOS_PROFILE_APP_BASE64` | `Prumo_app.mobileprovision` (Ad Hoc, "Prumo app") |
+| `IOS_PROFILE_WIDGET_BASE64` | `Prumo_widget.mobileprovision` (Ad Hoc, "Prumo Widget") |
+| `IOS_PROFILE_APP_STORE_BASE64` | `Prumo_app_connect.mobileprovision` (App Store, "Prumo app connect") |
+| `IOS_PROFILE_WIDGET_STORE_BASE64` | `Prumo_widget_connect.mobileprovision` (App Store, "Prumo widget connect") |
+| `ASC_KEY_BASE64`, `ASC_KEY_ID` | `AuthKey_<KEYID>.p8` (chave da API do App Store Connect) |
+| `ASC_ISSUER_ID` | `asc.env` |
 
 Para atualizar depois de renovar um certificado ou perfil:
 
@@ -72,9 +76,7 @@ Para atualizar depois de renovar um certificado ou perfil:
 scripts/configurar-assinatura.sh            # lê ~/.config/prumo/assinatura
 ```
 
-O script confere se a chave corresponde ao certificado e se os perfis incluem o App Group. O CI monta o `.p12` na hora, então não há senha de `.p12` guardada.
-
-Os perfis atuais são Ad Hoc (um aparelho registrado). Para TestFlight e App Store são necessários perfis do tipo App Store e um `ExportOptions` com `method` = `app-store-connect`.
+O script confere se a chave corresponde ao certificado e se os perfis incluem o App Group. O CI monta o `.p12` na hora, então não há senha de `.p12` guardada. Se renomear um perfil no portal, ajuste `PRUMO_PERFIL_*` em `project.yml`, o workflow e os `ci/ExportOptions-*.plist`.
 
 ## Como funciona
 

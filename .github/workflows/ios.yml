@@ -7,10 +7,11 @@ on:
   pull_request:
   workflow_dispatch:
     inputs:
-      assinar:
-        description: Gerar IPA assinado (Ad Hoc)
-        type: boolean
-        default: true
+      destino:
+        description: Para onde vai o build assinado
+        type: choice
+        options: [testflight, adhoc, nenhum]
+        default: testflight
 
 concurrency:
   group: ios-${{ github.ref }}
@@ -48,27 +49,47 @@ jobs:
             CODE_SIGNING_ALLOWED=NO
 
   # Só em disparo manual ou tag v*: nunca em pull request, para os segredos não chegarem a forks.
+  # Tag v* envia ao TestFlight; o disparo manual escolhe entre TestFlight e Ad Hoc.
   assinado:
-    name: IPA assinado (Ad Hoc)
-    if: (github.event_name == 'workflow_dispatch' && inputs.assinar) || startsWith(github.ref, 'refs/tags/v')
+    name: Build assinado (${{ inputs.destino || 'testflight' }})
+    if: (github.event_name == 'workflow_dispatch' && inputs.destino != 'nenhum') || startsWith(github.ref, 'refs/tags/v')
     needs: [motor-linux, app-macos]
     runs-on: macos-15
     env:
+      DESTINO: ${{ inputs.destino || 'testflight' }}
       IOS_DIST_CERT_BASE64: ${{ secrets.IOS_DIST_CERT_BASE64 }}
       IOS_DIST_KEY_BASE64: ${{ secrets.IOS_DIST_KEY_BASE64 }}
       IOS_PROFILE_APP_BASE64: ${{ secrets.IOS_PROFILE_APP_BASE64 }}
       IOS_PROFILE_WIDGET_BASE64: ${{ secrets.IOS_PROFILE_WIDGET_BASE64 }}
+      IOS_PROFILE_APP_STORE_BASE64: ${{ secrets.IOS_PROFILE_APP_STORE_BASE64 }}
+      IOS_PROFILE_WIDGET_STORE_BASE64: ${{ secrets.IOS_PROFILE_WIDGET_STORE_BASE64 }}
+      ASC_KEY_BASE64: ${{ secrets.ASC_KEY_BASE64 }}
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Conferir segredos
+      - name: Escolher perfis e número do build
         run: |
-          for v in IOS_DIST_CERT_BASE64 IOS_DIST_KEY_BASE64 IOS_PROFILE_APP_BASE64 IOS_PROFILE_WIDGET_BASE64; do
+          if [ "$DESTINO" = testflight ]; then
+            echo "PERFIL_APP=Prumo app connect"       >> "$GITHUB_ENV"
+            echo "PERFIL_WIDGET=Prumo widget connect" >> "$GITHUB_ENV"
+            echo "EXPORT_OPTIONS=ci/ExportOptions-AppStore.plist" >> "$GITHUB_ENV"
+            obrigatorios="IOS_PROFILE_APP_STORE_BASE64 IOS_PROFILE_WIDGET_STORE_BASE64 ASC_KEY_BASE64 ASC_KEY_ID ASC_ISSUER_ID"
+          else
+            echo "PERFIL_APP=Prumo app"       >> "$GITHUB_ENV"
+            echo "PERFIL_WIDGET=Prumo Widget" >> "$GITHUB_ENV"
+            echo "EXPORT_OPTIONS=ci/ExportOptions-AdHoc.plist" >> "$GITHUB_ENV"
+            obrigatorios="IOS_PROFILE_APP_BASE64 IOS_PROFILE_WIDGET_BASE64"
+          fi
+          for v in IOS_DIST_CERT_BASE64 IOS_DIST_KEY_BASE64 $obrigatorios; do
             if [ -z "${!v}" ]; then
               echo "::error::Segredo $v ausente. Rode scripts/configurar-assinatura.sh."
               exit 1
             fi
           done
+          # Único e crescente, inclusive ao reexecutar o mesmo run.
+          echo "BUILD=$(( ${{ github.run_number }} * 10 + ${{ github.run_attempt }} ))" >> "$GITHUB_ENV"
 
       - name: Instalar certificado num keychain temporário
         run: |
@@ -103,15 +124,15 @@ jobs:
       - name: Instalar perfis de provisionamento
         run: |
           set -euo pipefail
-          for nome in APP WIDGET; do
-            var="IOS_PROFILE_${nome}_BASE64"
-            f="$RUNNER_TEMP/$nome.mobileprovision"
+          for var in IOS_PROFILE_APP_BASE64 IOS_PROFILE_WIDGET_BASE64 IOS_PROFILE_APP_STORE_BASE64 IOS_PROFILE_WIDGET_STORE_BASE64; do
+            [ -n "${!var}" ] || continue
+            f="$RUNNER_TEMP/$var.mobileprovision"
             echo "${!var}" | base64 --decode > "$f"
-            security cms -D -i "$f" > "$RUNNER_TEMP/$nome.plist"
-            uuid="$(plutil -extract UUID raw -o - "$RUNNER_TEMP/$nome.plist")"
-            echo "$nome: $(plutil -extract Name raw -o - "$RUNNER_TEMP/$nome.plist") ($uuid)"
-            if ! grep -q "group.br.prumo.app" "$RUNNER_TEMP/$nome.plist"; then
-              echo "::error::O perfil $nome não inclui o App Group group.br.prumo.app."
+            security cms -D -i "$f" > "$RUNNER_TEMP/$var.plist"
+            uuid="$(plutil -extract UUID raw -o - "$RUNNER_TEMP/$var.plist")"
+            echo "$var: $(plutil -extract Name raw -o - "$RUNNER_TEMP/$var.plist") ($uuid)"
+            if ! grep -q "group.br.prumo.app" "$RUNNER_TEMP/$var.plist"; then
+              echo "::error::O perfil $var não inclui o App Group group.br.prumo.app."
               exit 1
             fi
             for d in "$HOME/Library/MobileDevice/Provisioning Profiles" "$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles"; do
@@ -127,35 +148,49 @@ jobs:
 
       - name: Arquivar
         run: |
-          set -o pipefail
           xcodebuild archive \
             -project Prumo.xcodeproj \
             -scheme Prumo \
             -configuration Release \
             -destination 'generic/platform=iOS' \
             -archivePath "$RUNNER_TEMP/Prumo.xcarchive" \
-            CURRENT_PROJECT_VERSION=${{ github.run_number }} \
+            CURRENT_PROJECT_VERSION="$BUILD" \
+            PRUMO_PERFIL_APP="$PERFIL_APP" \
+            PRUMO_PERFIL_WIDGET="$PERFIL_WIDGET" \
             OTHER_CODE_SIGN_FLAGS="--keychain $KEYCHAIN"
 
       - name: Exportar IPA
         run: |
           xcodebuild -exportArchive \
             -archivePath "$RUNNER_TEMP/Prumo.xcarchive" \
-            -exportOptionsPlist ci/ExportOptions-AdHoc.plist \
+            -exportOptionsPlist "$EXPORT_OPTIONS" \
             -exportPath "$RUNNER_TEMP/ipa"
           ls -la "$RUNNER_TEMP/ipa"
 
+      - name: Enviar ao TestFlight
+        if: env.DESTINO == 'testflight'
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/.appstoreconnect/private_keys"
+          echo "$ASC_KEY_BASE64" | base64 --decode > "$HOME/.appstoreconnect/private_keys/AuthKey_$ASC_KEY_ID.p8"
+          xcrun altool --upload-app --type ios \
+            --file "$(ls "$RUNNER_TEMP"/ipa/*.ipa | head -1)" \
+            --apiKey "$ASC_KEY_ID" \
+            --apiIssuer "$ASC_ISSUER_ID"
+          echo "Build $BUILD enviado. O processamento no App Store Connect leva alguns minutos." >> "$GITHUB_STEP_SUMMARY"
+
       - uses: actions/upload-artifact@v4
         with:
-          name: Prumo-adhoc-${{ github.run_number }}
+          name: Prumo-${{ env.DESTINO }}-${{ env.BUILD }}
           path: ${{ runner.temp }}/ipa/*.ipa
           retention-days: 14
           if-no-files-found: error
 
-      - name: Limpar keychain e perfis
+      - name: Limpar keychain, perfis e chave da API
         if: always()
         run: |
           [ -n "${KEYCHAIN:-}" ] && security delete-keychain "$KEYCHAIN" || true
+          rm -rf "$HOME/.appstoreconnect"
           rm -f "$HOME/Library/MobileDevice/Provisioning Profiles/"*.mobileprovision
           rm -f "$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles/"*.mobileprovision
           rm -f "$RUNNER_TEMP"/*.mobileprovision "$RUNNER_TEMP"/*.plist "$RUNNER_TEMP"/dist.*
