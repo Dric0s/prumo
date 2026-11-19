@@ -1,0 +1,361 @@
+[
+  {
+    "id": "H01",
+    "titulo": "Manual • Epicteto",
+    "url": "https://classics.mit.edu/Epictetus/epicench.html",
+    "ideia": "Enchiridion, versão inglesa de Elizabeth Carter. Texto organizado por Arriano a partir dos ensinamentos de Epicteto.",
+    "autor": "Epicteto",
+    "idioma_edicao": "en",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "H02",
+    "titulo": "Meditações • livro IV",
+    "url": "https://classics.mit.edu/Antoninus/meditations.4.four.html",
+    "ideia": "Tradução inglesa de George Long. Cada entrada identifica o livro e a seção.",
+    "autor": "Marco Aurélio",
+    "idioma_edicao": "en",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "H03",
+    "titulo": "Meditações • livro VI",
+    "url": "https://classics.mit.edu/Antoninus/meditations.6.six.html",
+    "ideia": "Tradução inglesa de George Long, em The Internet Classics Archive.",
+    "autor": "Marco Aurélio",
+    "idioma_edicao": "en",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "HS01",
+    "titulo": "Cartas a Lucílio • carta 1",
+    "url": "https://en.wikisource.org/wiki/Moral_letters_to_Lucilius/Letter_1",
+    "ideia": "Moral Letters to Lucilius, tradução inglesa de Richard M. Gummere. Indicação de carta e parágrafo conforme a edição.",
+    "autor": "Sêneca",
+    "idioma_edicao": "en",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "HS02",
+    "titulo": "Cartas a Lucílio • carta 2",
+    "url": "https://en.wikisource.org/wiki/Moral_letters_to_Lucilius/Letter_2",
+    "ideia": "Moral Letters to Lucilius, tradução inglesa de Richard M. Gummere. Indicação de carta e parágrafo conforme a edição.",
+    "autor": "Sêneca",
+    "idioma_edicao": "en",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "HS03",
+    "titulo": "Cartas a Lucílio • carta 3",
+    "url": "https://en.wikisource.org/wiki/Moral_letters_to_Lucilius/Letter_3",
+    "ideia": "Moral Letters to Lucilius, tradução inglesa de Richard M. Gummere. Indicação de carta e parágrafo conforme a edição.",
+    "autor": "Sêneca",
+    "idioma_edicao": "en",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "HS06",
+    "titulo": "Cartas a Lucílio • carta 6",
+    "url": "https://en.wikisource.org/wiki/Moral_letters_to_Lucilius/Letter_6",
+    "ideia": "Moral Letters to Lucilius, tradução inglesa de Richard M. Gummere. Indicação de carta e parágrafo conforme a edição.",
+    "autor": "Sêneca",
+    "idioma_edicao": "en",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "HS13",
+    "titulo": "Cartas a Lucílio • carta 13",
+    "url": "https://en.wikisource.org/wiki/Moral_letters_to_Lucilius/Letter_13",
+    "ideia": "Moral Letters to Lucilius, tradução inglesa de Richard M. Gummere. Indicação de carta e parágrafo conforme a edição.",
+    "autor": "Sêneca",
+    "idioma_edicao": "en",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "H04",
+    "titulo": "Autobiografia • plano das virtudes",
+    "url": "https://tile.loc.gov/storage-services/public/gdcmassbookdig/autobiographyofb02fran/autobiographyofb02fran.pdf",
+    "ideia": "Texto de Benjamin Franklin na seção Plan for Attaining Moral Perfection, com as perguntas de começo e de fim do dia e o quadro das treze virtudes.",
+    "autor": "Benjamin Franklin",
+    "idioma_edicao": "en",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "H05",
+    "titulo": "My Life and Work",
+    "url": "https://tile.loc.gov/storage-services/public/gdcmassbookdig/mylifework01ford/mylifework01ford.pdf",
+    "ideia": "Edição de 1922, exemplar da Library of Congress. Na introdução, Ford expõe os princípios do seu trabalho com a colaboração de Samuel Crowther.",
+    "autor": "Henry Ford, com Samuel Crowther",
+    "idioma_edicao": "en",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "H06",
+    "titulo": "How We Think • capítulo I",
+    "url": "https://brocku.ca/MeadProject/Dewey/Dewey_1910a/Dewey_1910_a.html",
+    "ideia": "Edição de 1910. Dewey descreve o pensamento reflexivo a partir de situações que oferecem caminhos diferentes.",
+    "autor": "John Dewey",
+    "idioma_edicao": "en",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "H07",
+    "titulo": "Democracy and Social Ethics",
+    "url": "https://janeaddams.ramapo.edu/2015/11/03/did-she-really-say-that-jane-addams-quotes-on-the-web/",
+    "ideia": "Localização confrontada com a edição de 1907 pelo Jane Addams Papers Project. O arquivo comenta atribuições incorretas que circulam na internet.",
+    "autor": "Jane Addams",
+    "idioma_edicao": "en",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "H08",
+    "titulo": "Notes on Nursing • Observation of the Sick",
+    "url": "https://classicslaunch.org/works/nightingale-notes-on-nursing/read/",
+    "ideia": "No capítulo sobre observação, Nightingale recorda a finalidade de reunir informações sobre quem recebe cuidados.",
+    "autor": "Florence Nightingale",
+    "idioma_edicao": "en",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "H09",
+    "titulo": "Ode de Ricardo Reis, de 14/02/1933",
+    "url": "https://casafernandopessoa.pt/pt/cfp/visita/museu/poemas-e-textos-escolhidos/lingua-gestual-portuguesa/ricardo-reis-para-ser-grande-se-inteiro",
+    "ideia": "Texto em português da Casa Fernando Pessoa. A autoria exibida preserva o heterônimo.",
+    "autor": "Ricardo Reis (Fernando Pessoa)",
+    "idioma_edicao": "pt",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "H10",
+    "titulo": "Esaú e Jacó • capítulo XXII",
+    "url": "https://pt.wikisource.org/wiki/Esa%C3%BA_e_Jac%C3%B3/XXII",
+    "ideia": "O narrador interrompe o relato para avançar no tempo. Fragmento da frase que inicia com 'O salto é grande'.",
+    "autor": "Machado de Assis",
+    "idioma_edicao": "pt",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "H11",
+    "titulo": "Campos de Castilla • Proverbios y cantares",
+    "url": "https://poemas.uned.es/poema/proverbios-y-cantares-antonio-machado/",
+    "ideia": "Transcrição espanhola apresentada pela Universidad Nacional de Educación a Distancia (UNED).",
+    "autor": "Antonio Machado",
+    "idioma_edicao": "es",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "H12",
+    "titulo": "Narrative of the Life of Frederick Douglass • capítulo VI",
+    "url": "https://courses.lumenlearning.com/suny-eng-101-college-writing-i-lynch/chapter/frederick-douglasshow-i-learned-to-read/",
+    "ideia": "Memórias de Douglass sobre o momento em que entendeu por que seus escravizadores tentavam lhe impedir o acesso à leitura.",
+    "autor": "Frederick Douglass",
+    "idioma_edicao": "en",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "H13",
+    "titulo": "Citizenship in a Republic • discurso na Sorbonne",
+    "url": "https://www.presidency.ucsb.edu/documents/address-the-sorbonne-paris-france-citizenship-republic",
+    "ideia": "Transcrição do discurso de 23/04/1910, parágrafo conhecido pela imagem da arena.",
+    "autor": "Theodore Roosevelt",
+    "idioma_edicao": "en",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "H14",
+    "titulo": "Poema 1176 • We never know how high we are",
+    "url": "https://poets.org/poem/we-never-know-how-high-we-are-1176/print",
+    "ideia": "Edição da Academy of American Poets. A imagem de se erguer vem dos dois versos de abertura.",
+    "autor": "Emily Dickinson",
+    "idioma_edicao": "en",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "H15",
+    "titulo": "Intervenção na National Negro Business League, 1912",
+    "url": "https://cdn.savingplaces.org/2016/08/26/13/39/33/721/Preserving-Villa-Lewaro-National-Treasure-Madam-C-J-Walker-Estate.pdf",
+    "ideia": "O National Trust for Historic Preservation reproduz a declaração da empresária sobre a passagem do trabalho doméstico à fabricação de produtos capilares.",
+    "autor": "Madam C. J. Walker",
+    "idioma_edicao": "en",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "H16",
+    "titulo": "Little Women • capítulo XLIV",
+    "url": "https://etc.usf.edu/lit2go/36/little-women/451/part-2-chapter-44-my-lord-and-lady/",
+    "ideia": "No capítulo My Lord and Lady, Amy March compara seu aprendizado a navegar. É uma fala de personagem.",
+    "autor": "Louisa May Alcott (na voz de Amy March)",
+    "idioma_edicao": "en",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "H17",
+    "titulo": "Leaves of Grass • Song of Myself",
+    "url": "https://whitmanarchive.org/media/data/whitman-criticism/source/pdf/anc.01063.pdf",
+    "ideia": "Walt Whitman Archive, trecho da seção 20 do poema.",
+    "autor": "Walt Whitman",
+    "idioma_edicao": "en",
+    "classe": "obra_historica"
+  },
+  {
+    "id": "PR-RA",
+    "titulo": "Rebeca Andrade • conversa na COB Expo, 2024",
+    "url": "https://ge.globo.com/olimpiadas/noticia/2024/09/28/rebeca-andrade-diz-que-precisa-cuidar-do-corpo-e-descarta-solo-para-la28-eu-nao-quero.ghtml",
+    "ideia": "No encontro com Nadia Comaneci, Andrade falou em priorizar férias e cuidar do corpo depois de Paris. Inspiração para mensagens originais sobre descanso e escolha.",
+    "classe": "depoimento"
+  },
+  {
+    "id": "LIN01",
+    "titulo": "Self-determination theory and the facilitation of intrinsic motivation, social development, and well-being (2000)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/11392867/",
+    "ideia": "Richard M. Ryan e Edward L. Deci discutem autonomia, competência e vínculo. Referência geral da linha editorial.",
+    "classe": "referencia_editorial"
+  },
+  {
+    "id": "LIN02",
+    "titulo": "Positive self-statements: power for some, peril for others (2009)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/19493324/",
+    "ideia": "Joanne V. Wood, W. Q. Elaine Perunovic e John W. Lee investigam como uma autoafirmação específica afetou participantes com diferentes níveis de autoestima. Referência geral de tom.",
+    "classe": "referencia_editorial"
+  },
+  {
+    "id": "EST01",
+    "titulo": "Test-enhanced learning: taking memory tests improves long-term retention",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/16507066/",
+    "ideia": "Roediger e Karpicke (2006) observaram maior retenção tardia de textos após a prática de recuperar o que havia sido lido. Inspira convites a lembrar antes de consultar.",
+    "classe": "referencia_editorial"
+  },
+  {
+    "id": "EST02",
+    "titulo": "Spacing effects in learning: a temporal ridgeline of optimal retention",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/19076480/",
+    "ideia": "Cepeda e colegas (2008) estudaram a distribuição das revisões ao longo do tempo. O intervalo mais favorável variou conforme a distância até o teste final.",
+    "classe": "referencia_editorial"
+  },
+  {
+    "id": "EST03",
+    "titulo": "Unsuccessful retrieval attempts enhance subsequent learning",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/19586265/",
+    "ideia": "Kornell, Hays e Bjork (2009) observaram benefícios de tentar responder antes de receber a resposta correta, mesmo após uma tentativa malsucedida.",
+    "classe": "referencia_editorial"
+  },
+  {
+    "id": "EST04",
+    "titulo": "Self-explanations: How students study and use examples in learning to solve problems",
+    "url": "https://doi.org/10.1207/s15516709cog1302_1",
+    "ideia": "Chi e colegas (1989) analisaram como estudantes explicavam a si mesmos exemplos resolvidos de mecânica e relacionavam os passos a princípios. Inspira perguntas sobre o porquê de cada passo.",
+    "classe": "referencia_editorial"
+  },
+  {
+    "id": "TRA01",
+    "titulo": "The Power of Small Wins — Teresa M. Amabile e Steven J. Kramer (2011)",
+    "url": "https://hbr.org/2011/05/the-power-of-small-wins",
+    "ideia": "Perceber um avanço concreto em uma atividade relevante pode alimentar a motivação. A obra inspirou convites a reconhecer pequenas conquistas no trabalho.",
+    "classe": "referencia_editorial"
+  },
+  {
+    "id": "TRA02",
+    "titulo": "Psychological Safety and Learning Behavior in Work Teams — Amy Edmondson (1999)",
+    "url": "https://doi.org/10.2307/2666999",
+    "ideia": "O estudo relaciona a segurança para assumir riscos interpessoais à aprendizagem em equipe. A seleção explora a experiência de perguntar, reconhecer dúvidas e pedir ajuda.",
+    "classe": "referencia_editorial"
+  },
+  {
+    "id": "TRA03",
+    "titulo": "Working Time and Work-Life Balance Around the World — Organização Internacional do Trabalho (2023)",
+    "url": "https://www.ilo.org/publications/working-time-and-work-life-balance-around-world",
+    "ideia": "A duração e a organização da jornada afetam a relação entre trabalho e vida pessoal. A referência orientou o tratamento editorial de escalas, limites e descanso.",
+    "classe": "referencia_editorial"
+  },
+  {
+    "id": "TRA04",
+    "titulo": "TeamSTEPPS: Section 1, Overview of Key Concepts and Tools — Agency for Healthcare Research and Quality",
+    "url": "https://www.ahrq.gov/teamstepps-program/curriculum/communication/overview/index.html",
+    "ideia": "O material apresenta ferramentas para confirmar informações e transferir responsabilidades em equipes de saúde. As frases adaptam a ideia de comunicação clara à troca de turnos em diferentes ofícios.",
+    "classe": "referencia_editorial"
+  },
+  {
+    "id": "TRA05",
+    "titulo": "Use Situation-Behavior-Impact (SBI)™ To Understand Intent — Center for Creative Leadership (2025)",
+    "url": "https://www.ccl.org/articles/leading-effectively-articles/closing-the-gap-between-intent-vs-impact-sbii/",
+    "ideia": "Uma conversa de feedback pode situar o episódio, descrever o comportamento observado e explicar seu impacto. Perguntar permite conhecer a intenção da outra pessoa.",
+    "classe": "referencia_editorial"
+  },
+  {
+    "id": "TRA06",
+    "titulo": "My Next Career Move: Participant Guide — U.S. Department of Labor (2026)",
+    "url": "https://www.dol.gov/sites/dolgov/files/VETS/files/MyNextCareerMove_PG_Interactive_Feb2026.pdf",
+    "ideia": "O guia de transição convida a reconhecer habilidades já adquiridas e explorar sua relação com outras ocupações. Essa reflexão inspirou as frases sobre mudanças de carreira.",
+    "classe": "referencia_editorial"
+  },
+  {
+    "id": "EMP-EFEITO",
+    "titulo": "The Five Principles of Effectuation — Society for Effectual Action",
+    "url": "https://effectuation.org/the-five-principles-of-effectuation-detail?hsLang=en",
+    "ideia": "Começar pelos recursos disponíveis, escolher perdas que se pode suportar e construir parcerias por compromisso mútuo.",
+    "classe": "referencia_editorial"
+  },
+  {
+    "id": "EMP-ESCUTA",
+    "titulo": "The Mom Test — Rob Fitzpatrick",
+    "url": "https://www.momtestbook.com/",
+    "ideia": "Em conversas com possíveis clientes, buscar exemplos do que fizeram e perceber onde as próprias perguntas induzem a resposta.",
+    "classe": "referencia_editorial"
+  },
+  {
+    "id": "EMP-PRIMEIROS",
+    "titulo": "Do Things That Don’t Scale — Paul Graham",
+    "url": "https://paulgraham.com/ds.html",
+    "ideia": "Conquistar os primeiros usuários pessoalmente e aproveitar o contato direto para conhecer as necessidades de cada um.",
+    "classe": "referencia_editorial"
+  },
+  {
+    "id": "EMP-PROTOTIPO",
+    "titulo": "Design Thinking Bootleg — Stanford d.school",
+    "url": "https://dschool.stanford.edu/tools/design-thinking-bootleg",
+    "ideia": "Tornar uma hipótese concreta o suficiente para que alguém possa experimentar, observar seu uso e revisar o desenho.",
+    "classe": "referencia_editorial"
+  },
+  {
+    "id": "EMP-PRECO",
+    "titulo": "Saiba como fazer seu preço de venda de forma simples e lucrativa — Sebrae",
+    "url": "https://sebrae.com.br/Sebrae/Portal%20Sebrae/Arquivos/ebook_sebrae_saiba_como_fazer_seu_preco_de_venda.pdf",
+    "ideia": "Considerar materiais, tempo de trabalho, deslocamentos, despesas e margem na formação dos preços.",
+    "classe": "referencia_editorial"
+  },
+  {
+    "id": "EMP-CAIXA",
+    "titulo": "O que é o fluxo de caixa e como aplicá-lo no seu negócio — Sebrae",
+    "url": "https://meuatendimento.sebrae.com.br/sites/PortalSebrae/artigos/fluxo-de-caixa-o-que-e-e-como-implantar,b29e438af1c92410VgnVCM100000b272010aRCRD",
+    "ideia": "Registrar entradas e saídas e distinguir o que já aconteceu das movimentações previstas para outras datas.",
+    "classe": "referencia_editorial"
+  },
+  {
+    "id": "EMP-CALMA",
+    "titulo": "It Doesn’t Have to Be Crazy at Work — Jason Fried e David Heinemeier Hansson",
+    "url": "https://basecamp.com/books",
+    "ideia": "Organizar o negócio para que a urgência constante e a disponibilidade fora do horário não comandem o cotidiano da equipe.",
+    "classe": "referencia_editorial"
+  },
+  {
+    "id": "TRE-GUIA",
+    "titulo": "Ministério da Saúde. Guia de Atividade Física para a População Brasileira (2021).",
+    "url": "https://www.gov.br/saude/pt-br/assuntos/saude-brasil/eu-quero-me-exercitar/documentos/pdf/guia_atividade_fisica_populacao_brasileira.pdf/@@download/file",
+    "ideia": "O guia descreve formas de movimento no lazer, nos deslocamentos e no cotidiano. Sugere planejar horários possíveis, experimentar atividades prazerosas e buscar companhia quando desejada.",
+    "classe": "referencia_editorial"
+  },
+  {
+    "id": "TRE-AUTONOMIA",
+    "titulo": "Teixeira PJ, Carraça EV, Markland D, Silva MN, Ryan RM. Exercise, physical activity, and self-determination theory: a systematic review (2012).",
+    "url": "https://doi.org/10.1186/1479-5868-9-78",
+    "ideia": "A revisão relaciona a participação em exercícios à escolha pessoal, ao prazer e à percepção de competência. Serviu de referência conceitual para frases autorais sobre motivos próprios e pequenas aprendizagens.",
+    "classe": "referencia_editorial"
+  },
+  {
+    "id": "TRE-RETOMADA",
+    "titulo": "Semenchuk BN, Strachan SM, Fortier M. Self-Compassion and the Self-Regulation of Exercise: Reactions to Recalled Exercise Setbacks (2018).",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/29580155/",
+    "ideia": "Estudo observacional sobre contratempos no exercício. Ao recordarem interrupções, participantes com mais autocompaixão relataram maior disposição para retomar seus objetivos.",
+    "classe": "referencia_editorial"
+  }
+]

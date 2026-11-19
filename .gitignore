@@ -1,0 +1,16 @@
+# Xcode
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+DerivedData/
+build/
+*.xcuserstate
+# Gerado pelo XcodeGen a partir de project.yml
+Prumo.xcodeproj/
+
+# SwiftPM
+PrumoKit/.build/
+PrumoKit/.swiftpm/
+.build/
+.swiftpm/
+
+.DS_Store

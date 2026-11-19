@@ -1,0 +1,771 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6f4ed">
+<link rel="icon" href="data:,">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; font-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Hoje · Prumo</title>
+<style>
+:root {
+  color-scheme: light;
+  --paper: #f6f4ed; --surface: #fbfaf6; --ink: #202d27; --muted: #58665c;
+  --rule: #d8d9ce; --rule-strong: #bfc5b9; --forest: #183f38;
+  --accent: #20544a; --tint: #e5ebe0; --gold: #d9d3a8; --light: #fbf8ed;
+  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  --serif: "STIX Two Text", "Baskervville", "Iowan Old Style", Baskerville, Georgia, "Times New Roman", serif;
+  font-family: var(--sans); color: var(--ink); background: var(--paper);
+  font-synthesis: none; -webkit-text-size-adjust: 100%;
+}
+* {box-sizing: border-box}
+body {margin: 0; min-height: 100vh; min-height: 100svh; line-height: 1.5}
+button, input {font: inherit}
+button, a {touch-action: manipulation; -webkit-tap-highlight-color: transparent}
+button {cursor: pointer; color: inherit}
+a {color: inherit; text-decoration: none}
+button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visible {
+  outline: 3px solid #a06924; outline-offset: 4px;
+}
+h1:focus {outline: none}
+button:disabled {cursor: default}
+button {background: none; border: none}
+h1, h2, h3, p, blockquote, figure, ol {margin: 0}
+.icon {width: 20px; height: 20px; flex: none; display: inline-block; vertical-align: middle;
+  stroke: currentColor; stroke-width: 1.6; fill: none; stroke-linecap: round; stroke-linejoin: round}
+.defs {position: absolute; width: 0; height: 0; overflow: hidden}
+.skip {position: fixed; top: -100px; left: 16px; z-index: 20; background: white; padding: 12px 18px}
+.skip:focus {top: 10px}
+.shell {width: min(1120px, calc(100% - 112px)); margin-inline: auto}
+.mast {border-bottom: 1px solid var(--rule)}
+.mast-inner {height: 82px; display: flex; gap: 20px; align-items: center; justify-content: space-between}
+.wordmark {display: inline-flex; gap: 10px; align-items: center; color: var(--forest); min-height: 44px;
+  font-family: var(--serif); font-size: 39px; line-height: 1; letter-spacing: -.068em}
+.wordmark .mark {width: 25px; height: 35px; stroke-width: 1.35}
+.navigation {display: flex; gap: 5px; align-items: center}
+.navigation a {display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px;
+  padding: 0 16px; border-radius: 6px; color: #516056; font-size: 14px; font-weight: 550}
+.navigation a .icon {width: 17px; height: 17px}
+.navigation a[aria-current=page] {color: #1d493f; background: #e3e8dd}
+.navigation a:hover {color: var(--ink); background: #eaece3}
+main {padding-bottom: 48px}
+.pagehead {display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; padding: 43px 0 27px}
+.kicker {color: var(--muted); font-size: 11px; letter-spacing: .14em; font-weight: 650; text-transform: uppercase}
+.pagehead h1 {font: 400 clamp(50px, 5.5vw, 77px)/1.03 var(--serif); letter-spacing: -.066em; margin-top: 5px}
+.local-clock {color: var(--muted); font-size: 13px; display: inline-flex; align-items: center; gap: 7px; padding-bottom: 6px;
+  font-variant-numeric: tabular-nums}
+.local-clock .icon {width: 16px; height: 16px}
+.today-grid {display: grid; grid-template-columns: minmax(0, 1.62fr) minmax(280px, .88fr); gap: 21px 24px; align-items: stretch}
+.reading {
+  position: relative; isolation: isolate; overflow: hidden; min-width: 0; min-height: 373px;
+  background: var(--forest); color: var(--light); border-radius: 8px; padding: 28px 34px 19px;
+  display: flex; flex-direction: column; grid-column: 1; grid-row: 1;
+}
+.reading::before {content: ""; position: absolute; inset: 0; z-index: -1;
+  background: radial-gradient(ellipse at 89% 9%, #285247 0, transparent 56%),
+  linear-gradient(126deg, #183c35 5%, #163b34 48%, #1b4139 100%)}
+.reading-top {display: flex; align-items: center; gap: 10px; min-height: 24px; padding-right: 95px; color: #e4e9db; flex-wrap: wrap}
+.period-name {font-size: 13px; font-weight: 650; letter-spacing: .055em; display: inline-flex; align-items: center; gap: 8px}
+.period-name .icon {width: 18px; height: 18px; color: #dddfba}
+.reading-range {color: #cbd9cd; font-size: 12px; border-left: 1px solid #657e6f; padding-left: 10px; font-variant-numeric: tabular-nums}
+.celestial {position: absolute; right: 19px; top: 11px; width: 123px; height: 85px; pointer-events: none}
+.reading-body {flex: 1; display: flex; align-items: center; padding: 40px 0 31px}
+.reading blockquote {font: 400 clamp(40px, 4.1vw, 65px)/1.045 var(--serif); letter-spacing: -.039em; max-width: 17ch;
+  color: var(--light); overflow-wrap: anywhere; text-wrap: pretty}
+.reading blockquote.long {font-size: clamp(30px, 3.6vw, 54px)}
+.reading-foot {border-top: 1px solid #527064; display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; padding-top: 13px}
+.reading-theme {display: inline-flex; gap: 8px; align-items: center; font-size: 13px; color: #e3e7da}
+.reading-theme .icon {width: 16px; height: 16px}
+.save-button {display: inline-flex; gap: 8px; align-items: center; justify-content: center; color: var(--light);
+  min-height: 44px; padding: 6px 13px; border: 1px solid #8ba293; border-radius: 5px; background: #ffffff04;
+  font-size: 13px; font-weight: 600}
+.save-button .icon {width: 16px; height: 16px}
+.save-button:hover, .save-button[aria-pressed=true] {background: #f0f1db; border-color: #f0f1db; color: #22493f}
+.periods {grid-column: 1; grid-row: 2; min-width: 0; padding: 1px 0}
+.periods-head {display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding-bottom: 11px}
+.subhead {font: 400 27px/1.16 var(--serif); letter-spacing: -.04em}
+.period-status {color: var(--muted); font-size: 12px; text-align: right}
+.period-options {display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 6px}
+.period-option {position: relative; display: flex; flex-direction: column; gap: 4px; align-items: flex-start;
+  justify-content: center; min-width: 0; min-height: 72px; padding: 11px 12px; text-align: left;
+  border: 1px solid var(--rule); background: #ffffff19; border-radius: 5px}
+.period-option[aria-pressed=true] {background: #e5eae0; border-color: #6f8c79; color: #1e493d}
+.period-option:hover {border-color: #879d8b}
+.option-head {font-size: 13px; font-weight: 650; line-height: 1.2}
+.option-time {font-size: 12px; font-variant-numeric: tabular-nums; color: var(--muted)}
+.period-option[aria-pressed=true] .option-time {color: var(--accent)}
+.preview-panel {grid-column: 2; grid-row: 1/3; display: flex; flex-direction: column;
+  min-width: 0; border: 1px solid var(--rule); background: var(--surface); border-radius: 8px; overflow: hidden}
+.preview-heading {padding: 22px 23px 15px}
+.preview-heading .kicker {font-size: 10px; letter-spacing: .14em}
+.preview-heading h2 {font-size: 30px; margin-top: 2px}
+.teaser-stage, .widget-stage {position: relative; overflow:hidden; isolation: isolate;
+  background: radial-gradient(ellipse at 20% 14%, #ecece1 0, transparent 53%), linear-gradient(120deg, #e4e5d9, #d3d7c9)}
+.teaser-stage::after, .widget-stage::after {content:""; pointer-events:none; position:absolute; inset:0; z-index:-1;
+  background: repeating-linear-gradient(131deg, transparent 0 16px, #ffffff18 16px 17px, transparent 17px 22px); opacity:.4}
+.teaser-stage {flex: 1; min-height: 245px; border-block: 1px solid #d9dccf; display:flex; align-items:flex-start;
+  justify-content:center; padding-top: 21px}
+.teaser-stage .device {position: absolute; top:22px; --device-w: min(76%, 245px)}
+.preview-link {display: flex; align-items: center; justify-content: space-between; min-height: 58px;
+  padding: 13px 24px; color: var(--accent); font-size: 14px; font-weight: 650}
+.preview-link:hover {background: #edf0e6}
+.preview-link .icon, .text-link .icon {width: 17px; height: 17px}
+.device {
+  --device-w: 250px; width: var(--device-w); aspect-ratio: 226 / 462; display: block; flex: none;
+  position: relative; border-radius: 16.5% / 8.1%; border: 2px solid #b4b8ac;
+  background: #1b201d; box-shadow: 0 0 0 .75px #666e62, inset 0 0 0 1px #3c413b,
+  10px 13px 20px #3c44382e, 1px 2px 3px #3f493d55; padding: 4px; container-type: inline-size
+}
+.device-screen {position: relative; isolation:isolate; overflow:hidden; width:100%; height:100%;
+  border-radius:15% / 7.4%; background:#375750; color: #fbfcf2; font-family:var(--sans)}
+.wallpaper {position: absolute; inset:0; width:100%; height:100%; z-index:-1; pointer-events: none}
+.island {width:26%; height:3.8%; background:#101513; border-radius:100px; position:absolute; top:2.5%; left:37%}
+.signal {position:absolute; right:7.1%; top:3.7%; display:flex; gap:.75cqw; align-items:center; color:#f0f6eb}
+.signal .icon {width:4.2cqw; height:3.5cqw; stroke-width:2}
+.signal .battery {width:6cqw; height:3.2cqw}
+.gesture {position:absolute; bottom:1.3%; width:32%; height:.8%; background:#f1f4e9; border-radius:30px; left:34%; opacity:.9}
+.lock-date {position:absolute; top:10.55%; left:0; right:0; text-align:center;
+  font-size:5.05cqw; font-weight:550; line-height:1.1; letter-spacing:-.025em; text-shadow:0 1px 2px #182f3040}
+.lock-clock {position:absolute; inset:13.2% 0 auto; text-align:center; font-size:25.2cqw;
+  line-height:1; font-weight:600; letter-spacing:-.085em; font-variant-numeric:tabular-nums;
+  text-shadow:0 1px 3px #20352e20}
+.accessory {position: absolute; left:7.8%; top:27.7%; width:43.5%; font-size:3.45cqw; line-height:1.12;
+  font-weight:500; letter-spacing:-.012em; text-align:left; text-shadow:0 1px 2px #1b322e50; overflow-wrap:anywhere}
+.accessory strong {display:block; margin-bottom:.4cqw; font-size:1em; font-weight:750}
+.torch {position:absolute; bottom:6%; display:grid; place-items:center; border:1px solid #ffffff22;
+  width:12.3%; aspect-ratio:1; background:#e1ecdb27; border-radius:50%}
+.torch.left {left:10%}.torch.right {right:10%}
+.torch .icon {width:5.6cqw; height:5.6cqw; stroke-width:1.9}
+.page-empty {padding: 38px 32px; text-align: center; border: 1px solid var(--rule); border-radius: 7px; background: var(--surface)}
+.empty-icon {width: 58px; height: 58px; display: grid; place-items: center; color: var(--accent);
+  border: 1px solid #bbc9b7; background: #edf0e6; border-radius: 50%; margin: 0 auto 17px}
+.empty-icon .icon {width: 24px; height: 24px}
+.page-empty h2 {font: 400 34px/1.12 var(--serif); letter-spacing: -.045em}
+.page-empty p {color: var(--muted); margin: 7px auto 20px; max-width: 32ch; font-size: 15px}
+.button-solid {display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 45px;
+  background: var(--forest); color: white; border-radius: 5px; padding: 10px 17px; font-size: 14px; font-weight: 650}
+.button-solid:hover {background: #28564a}
+.button-solid .icon {width: 17px; height: 17px}
+.saved-list {list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--rule-strong)}
+.saved-item {display:flex; align-items:center; gap:20px; justify-content:space-between; border-bottom:1px solid var(--rule); padding: 21px 7px 22px 0}
+.saved-meta {display:flex; align-items:center; gap:8px; flex-wrap:wrap; color:var(--muted); font-size:12px}
+.saved-item blockquote {font:400 clamp(25px,3vw,38px)/1.17 var(--serif); letter-spacing:-.035em; margin-top:7px; max-width:40ch}
+.remove {width:44px; height:44px; border:1px solid var(--rule); display:grid; place-items:center; border-radius:5px; color:var(--accent); flex:none}
+.remove:hover {border-color:var(--rule-strong); background:var(--tint)}
+.remove .icon {width:18px; height:18px}
+.widget-tabs {display:flex; gap:3px; background:#e8e9df; border:1px solid #d8dbcf; border-radius:7px;
+  padding:3px; width:fit-content; max-width:100%; margin:0 0 20px}
+.widget-tabs button {min-height:42px; padding:6px 16px; border-radius:4px; font-size:14px; font-weight:550;
+  color:var(--muted); display:flex; align-items:center; justify-content:center; gap:7px}
+.widget-tabs .icon {width:15px; height:15px}
+.widget-tabs button[aria-pressed=true] {background:var(--surface); color:var(--accent); box-shadow:0 1px 3px #26362924}
+.widget-grid {display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); gap:clamp(30px,5.5vw,78px); align-items:start}
+.widget-stage {width:100%; min-height:510px; border:1px solid #d6d9cc; border-radius:8px;
+  display:grid; place-items:center; padding:24px}
+.widget-stage .device {--device-w:224px}
+.guide {padding: 8px 0; min-width:0}
+.guide .kicker {margin-bottom:8px}
+.guide h2 {font:400 clamp(34px,3.8vw,52px)/1.04 var(--serif); letter-spacing:-.052em}
+.guide-intro {font-size:15px; color:var(--muted); max-width:43ch; margin:11px 0 25px}
+.guide h3 {font-size:15px; font-weight:670; border-top:1px solid var(--rule); padding-top:18px}
+.steps {list-style:none; counter-reset:guide; margin:8px 0 0; padding:0}
+.steps li {counter-increment:guide; position:relative; padding:9px 0 9px 33px; font-size:14px; max-width:47ch; color:#324239}
+.steps li::before {content:counter(guide); position:absolute; left:0; top:10px; width:22px; height:22px;
+  border:1px solid #c3ccbd; border-radius:50%; font:600 11px/20px var(--sans); text-align:center; color:var(--accent)}
+.steps strong {font-weight:650}
+.guide-note {padding-top:14px; margin-top:11px; border-top:1px solid var(--rule); font-size:12px; color:var(--muted); max-width:48ch}
+.home-status {position:absolute; left:8%; top:3.4%; font-size:3.7cqw; line-height:1; font-weight:650}
+.home-grid {position:absolute; inset:12% 7% auto; display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-auto-rows:21.2cqw; column-gap:3.1cqw; row-gap:1.9cqw; align-items:start}
+.ios-widget {grid-column:span 2; grid-row:span 2; height:100%; min-width:0; position:relative; display:flex; flex-direction:column;
+  border-radius:7cqw; background:#f6f3e9; color:#1e4036; border:1px solid #ffffff2b; padding:4.1cqw;
+  box-shadow:0 1px 2px #21453433}
+.ios-widget.medium {grid-column:span 4; background:#1d463e; color:#f6f2e5; padding:4cqw 5cqw; border:1px solid #bfd0c13d}
+.ios-label {font-size:2.65cqw; letter-spacing:.09em; text-transform:uppercase; font-weight:700; display:flex; align-items:center; gap:1cqw}
+.ios-label .icon {width:3.4cqw; height:3.4cqw}
+.ios-quote {font:400 4.95cqw/1.06 var(--serif); letter-spacing:-.035em; margin:auto 0; overflow-wrap:anywhere}
+.ios-widget.medium .ios-quote {font-size:5.2cqw; max-width:26ch}
+.ios-topic {font-size:2.6cqw; margin-top:1.2cqw; font-weight:550}
+.app-icon {text-align:center; font-size:2.9cqw; line-height:1.1; color:#fff; text-shadow:0 1px 2px #172c26cc; min-width:0}
+.app-glyph {display:grid; place-items:center; width:83%; margin:0 auto 1.1cqw; aspect-ratio:1;
+  border-radius:23%; background:#dbded0; color:#2a473d; box-shadow:0 1px 3px #172c262a; text-shadow:none}
+.app-glyph .icon {width:7.4cqw; height:7.4cqw; stroke-width:1.75}
+.app-icon.tone-1 .app-glyph {background:#e7ddc2; color:#705d3c}
+.app-icon.tone-2 .app-glyph {background:#b8c7ba; color:#31503e}
+.app-icon.tone-3 .app-glyph {background:#cdd6d1; color:#38544e}
+.home-dock {position:absolute; inset:auto 5% 5%; border:1px solid #eef2e836; background:#c9d4c047;
+  border-radius:7cqw; height:12%; display:grid; align-items:center; grid-template-columns:repeat(4,1fr); padding:0 3cqw}
+.home-dock .app-glyph {width:72%; margin-bottom:0}
+.home-dock .app-glyph .icon {width:6cqw; height:6cqw}
+.home-dots {position:absolute; bottom:20%; display:flex; gap:1.5cqw; justify-content:center; width:100%}
+.home-dots i {width:1.5cqw; height:1.5cqw; border-radius:50%; background:#ced8cb80}
+.home-dots i:first-child {background:#fff}
+.settings-grid {display:grid; grid-template-columns:minmax(0,1.03fr) minmax(0,.97fr); column-gap:32px; row-gap:22px; align-items:start}
+.setting-card {border:1px solid var(--rule); border-radius:7px; padding:23px 25px; background:var(--surface)}
+.setting-card h2 {font:400 29px/1.12 var(--serif); letter-spacing:-.045em}
+.setting-help {color:var(--muted); font-size:14px; margin:6px 0 14px}
+.theme-boxes {display:flex; flex-direction:column}
+.theme-box {display:flex; gap:13px; align-items:center; min-height:47px; border-top:1px solid #e1e2d8; font-size:14px; cursor:pointer}
+.theme-box>.icon {color:var(--accent); width:17px; height:17px}
+.theme-box input {margin-left:auto; accent-color:var(--accent); width:18px; height:18px}
+.times-card {grid-column:2; grid-row:1/3}
+.time-row {display:flex; gap:10px; min-height:60px; align-items:center; justify-content:space-between; border-top:1px solid #e1e2d8}
+.time-row label {display:inline-flex; gap:9px; align-items:center; font-weight:550; font-size:14px}
+.time-row label .icon {width:18px; height:18px; color:var(--accent)}
+.time-row input {appearance:none; -webkit-appearance:none; color:var(--ink); font-family:var(--sans); font-size:16px; line-height:1.2;
+  min-height:44px; min-width:96px; border:1px solid #ced5ca; border-radius:5px; padding:7px 8px; background:#f5f6ed; text-align:center;
+  font-variant-numeric:tabular-nums}
+.time-row input[aria-invalid=true] {border-color:#a34b40}
+.notice-card {grid-column:1; grid-row:2}
+.switch-row {display:flex; align-items:center; justify-content:space-between; gap:15px; min-height:45px; cursor:pointer}
+.switch-row input {appearance:none; position:relative; width:43px; height:26px; flex:none; background:#67766a;
+  border:1px solid #647168; border-radius:20px; margin:0; cursor:pointer}
+.switch-row input::before {content:""; position:absolute; left:2px; top:2px; width:20px; height:20px; border-radius:50%; background:#fff}
+.switch-row input:checked {background:var(--accent); border-color:var(--accent)}
+.switch-row input:checked::before {transform:translateX(17px)}
+.notice-card .setting-help {margin:6px 0 0}
+.form-actions {display:flex; align-items:center; gap:16px; margin-top:23px; flex-wrap:wrap}
+#settings-error {color:#8a332d; font-size:14px}
+#settings-error:empty {display:none}
+.storage-note {font-size:13px; color:var(--muted); margin-top:16px}
+.toast {pointer-events:none; position:fixed; bottom:22px; left:50%; transform:translateX(-50%);
+  background:#213c33; color:#f9f7ee; border:1px solid #4d6657; border-radius:7px; display:flex;
+  align-items:center; justify-content:center; gap:10px; font-size:14px; z-index:15; max-width:calc(100% - 28px);
+  padding:9px 15px; box-shadow:0 5px 20px #20352a22}
+.toast[hidden] {display:none}
+.toast button {pointer-events:auto; font-size:14px; min-height:40px; color:#e2e8bd; text-decoration:underline; text-underline-offset:3px}
+.sr {position:absolute!important; width:1px; height:1px; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap}
+.noscript {margin:24px auto; max-width:46ch}
+@media (min-width:1200px) {
+  .today-grid {grid-template-columns:minmax(0,1.62fr) minmax(310px,.88fr)}
+  .reading {min-height:383px; padding-inline:38px}
+}
+@media (max-width:960px) {
+  .shell {width:calc(100% - 64px)}
+  .mast-inner {height:72px}.navigation a {padding-inline:13px}
+  .today-grid {grid-template-columns:minmax(0,1.45fr) minmax(245px,.85fr); gap:20px 16px}
+  .reading {padding:24px 24px 16px; min-height:360px}
+  .period-option {padding:10px 9px}.option-head {font-size:12px}
+  .preview-heading {padding-inline:17px}.preview-link {padding-inline:17px}
+  .settings-grid {gap:18px}.setting-card {padding:20px}
+}
+@media (max-width:720px) {
+  body {padding-bottom:calc(71px + env(safe-area-inset-bottom))}
+  .shell {width:calc(100% - 36px); max-width:540px}
+  .mast-inner {height:62px}
+  .wordmark {font-size:31px; gap:7px}.wordmark .mark {width:20px; height:29px}
+  .navigation {position:fixed; bottom:0; left:0; right:0; z-index:10; border-top:1px solid #ced4c7;
+    background:#f8f7f0; padding:4px max(7px, calc((100vw - 490px)/2)) calc(4px + env(safe-area-inset-bottom));
+    display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:0}
+  .navigation a {flex-direction:column; gap:3px; padding:5px 2px 4px; min-height:54px; font-size:11px; line-height:1.2; border-radius:0; color:#59675d}
+  .navigation a[aria-current=page] {background:none; color:var(--accent); font-weight:730}
+  .navigation a[aria-current=page] .icon {stroke-width:2.1}
+  .navigation a .icon {width:20px; height:20px}
+  main {padding-bottom:22px}
+  .pagehead {padding:23px 0 19px; align-items:flex-end; gap:8px}
+  .pagehead h1 {font-size:54px; margin-top:3px}
+  .kicker {font-size:10px; letter-spacing:.115em}
+  .local-clock {font-size:11px; gap:5px; padding-bottom:4px}.local-clock .icon {width:13px;height:13px}
+  .today-grid {display:flex; flex-direction:column; gap:22px}
+  .reading {min-height:303px; padding:21px 22px 13px; border-radius:7px}
+  .reading-top {gap:8px; padding-right:72px}.reading-range {font-size:11px; padding-left:8px}
+  .period-name {font-size:12px; gap:6px}.period-name .icon {width:16px; height:16px}
+  .celestial {width:93px; height:67px; top:5px; right:9px}
+  .reading-body {padding:32px 0 26px}
+  .reading blockquote {font-size:clamp(38px, 9.6vw, 49px); line-height:1.05}
+  .reading blockquote.long {font-size:clamp(30px, 7.6vw, 42px)}
+  .reading-foot {padding-top:9px}.reading-theme {gap:6px; font-size:12px}
+  .save-button {font-size:12px; min-height:44px; padding:6px 9px}
+  .subhead {font-size:25px}
+  .periods-head {padding-bottom:10px}.period-status {font-size:11px}
+  .period-options {gap:4px}.period-option {min-height:63px; padding:8px; gap:3px}
+  .option-head {font-size:12px}.option-time {font-size:11px}
+  .preview-heading {padding:15px 18px 12px}.preview-heading h2 {font-size:26px}
+  .teaser-stage {min-height:178px}.teaser-stage .device {--device-w:185px; top:12px}
+  .preview-link {min-height:48px; font-size:13px}
+  .widget-tabs {width:100%; margin-bottom:14px}
+  .widget-tabs button {flex:1; padding:6px 5px; font-size:13px}
+  .widget-grid,.settings-grid {display:flex; flex-direction:column; gap:17px}
+  .widget-stage {min-height:400px; padding:18px}.widget-stage .device {--device-w:212px}
+  .guide {padding:0 2px}.guide h2 {font-size:36px}.guide-intro {margin:8px 0 16px; font-size:14px}
+  .guide h3 {padding-top:15px}.guide-note {margin-top:8px; padding-top:12px}
+  .page-empty {padding:29px 18px}.page-empty h2 {font-size:29px}
+  .saved-item {padding-block:17px; gap:10px}.saved-meta {gap:6px}.saved-item blockquote {font-size:27px}
+  .setting-card {width:100%; padding:17px 18px}.setting-card h2 {font-size:26px}
+  .setting-help {font-size:13px}.form-actions {margin-top:17px}
+  .toast {bottom:calc(73px + env(safe-area-inset-bottom)); width:max-content; max-width:calc(100% - 28px); font-size:13px}
+}
+@media (max-width:355px) {
+  .shell {width:calc(100% - 28px)}
+  .reading {padding-inline:16px}.reading blockquote {font-size:36px}
+  .reading blockquote.long {font-size:29px}
+  .period-option {padding-inline:5px}.option-head {font-size:11px}
+  .local-clock {font-size:10px}.kicker {font-size:9px}
+}
+@media (prefers-reduced-motion:reduce) {* {scroll-behavior:auto!important}}
+@media (forced-colors:active) {
+  .reading {border:1px solid CanvasText}.save-button,.period-option[aria-pressed=true],.navigation a[aria-current=page] {outline:2px solid Highlight}
+  .switch-row input:checked {outline:2px solid Highlight}.celestial {display:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<svg xmlns="http://www.w3.org/2000/svg" class="defs" aria-hidden="true"><defs>
+<symbol id="i-mark" viewBox="0 0 26 38"><path d="M13 1v17m-4-7h8M9.3 19.2h7.4L20 25l-7 11-7-11z"/><path d="M8 25h10m-5 1v7"/></symbol>
+<symbol id="i-today" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10 2 2m0-14-2 2M7 17l-2 2"/></symbol>
+<symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6.5 4.5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16l-5.5-4-5.5 4z"/></symbol>
+<symbol id="i-saved" viewBox="0 0 24 24"><path d="M6.5 4.5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16l-5.5-4-5.5 4z" fill="currentColor" stroke="currentColor"/></symbol>
+<symbol id="i-widgets" viewBox="0 0 24 24"><rect x="3" y="3.5" width="18" height="7" rx="1.7"/><rect x="3" y="13.5" width="7.5" height="7" rx="1.7"/><rect x="13.5" y="13.5" width="7.5" height="7" rx="1.7"/></symbol>
+<symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 6.5h5m4 0h7M4 12h9m4 0h3M4 17.5h3m4 0h9"/><circle cx="11" cy="6.5" r="2"/><circle cx="15" cy="12" r="2"/><circle cx="9" cy="17.5" r="2"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 6.7v5.8l3.6 2.1"/></symbol>
+<symbol id="i-manha" viewBox="0 0 24 24"><path d="M2.5 16h19m-16 4h13M7 16a5 5 0 0 1 10 0M12 3v3m-7.2 2 2 2m12.4-2-2 2"/></symbol>
+<symbol id="i-noite" viewBox="0 0 24 24"><path d="M20.3 14.8A8.2 8.2 0 0 1 9.2 3.7a8.7 8.7 0 1 0 11.1 11.1Z"/></symbol>
+<symbol id="i-madrugada" viewBox="0 0 24 24"><path d="M16.4 16.6A6.4 6.4 0 0 1 7.5 8a6.9 6.9 0 1 0 8.9 8.6ZM16.7 2.7v4m-2-2h4m1.5 4.5v3m-1.5-1.5h3"/></symbol>
+<symbol id="i-estudos" viewBox="0 0 24 24"><path d="M3 5.7c3-.8 6-.3 9 1.5 3-1.8 6-2.3 9-1.5v12.4c-3-.7-6-.2-9 1.6-3-1.8-6-2.3-9-1.6zM12 7.2v12.5"/></symbol>
+<symbol id="i-trabalho" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8.5 7V5a1.5 1.5 0 0 1 1.5-1.5h4A1.5 1.5 0 0 1 15.5 5v2M3 12c5.5 2.5 12.5 2.5 18 0m-9 1v2"/></symbol>
+<symbol id="i-empreender" viewBox="0 0 24 24"><path d="M4 20h16M6 16l4.5-5 3.2 2.8L20 6m-4 0h4v4"/></symbol>
+<symbol id="i-treino" viewBox="0 0 24 24"><path d="M8 12h8M5 7v10M8 5v14m8-14v14m3-12v10M2.5 10v4m19-4v4"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-5.5-5.5L19 12l-5.5 5.5"/></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="6" y="10" width="12" height="10" rx="2"/><path d="M8.5 10V7.3a3.5 3.5 0 1 1 7 0V10"/></symbol>
+<symbol id="i-small" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="3"/></symbol>
+<symbol id="i-medium" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="3"/></symbol>
+<symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2 8a15 15 0 0 1 20 0M5.5 12a10 10 0 0 1 13 0M9 16a4.5 4.5 0 0 1 6 0"/><circle cx="12" cy="19" r=".8" fill="currentColor"/></symbol>
+<symbol id="i-battery" viewBox="0 0 30 16"><rect x="1" y="2" width="24" height="12" rx="3"/><path d="M28 6v4"/><rect x="3.2" y="4.3" width="18" height="7.4" rx="1.2" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-flash" viewBox="0 0 24 24"><path d="M8 3h8l-1 6-2 3v7a1 1 0 0 1-2 0v-7l-2-3zM9 6h6"/></symbol>
+<symbol id="i-camera" viewBox="0 0 24 24"><path d="m7 7 2-3h6l2 3h3v13H4V7z"/><circle cx="12" cy="13" r="3.3"/></symbol>
+<symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18m-13 5h5"/></symbol>
+<symbol id="i-note" viewBox="0 0 24 24"><path d="M5 3h14v18H5zM8.5 8h7m-7 4h7m-7 4h4"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6 8.5 7 8.5-7"/></symbol>
+<symbol id="i-music" viewBox="0 0 24 24"><path d="M9 17V6l10-2v11M9 9l10-2"/><ellipse cx="6.5" cy="18.3" rx="2.5" ry="1.9"/><ellipse cx="16.5" cy="16.3" rx="2.5" ry="1.9"/></symbol>
+<symbol id="i-map" viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zm6-3v15m6-12v15"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="m3 11 9-8 9 8m-15-1v11h12V10"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.8 3.5 10 8 7.8 10c1.2 2.5 3.5 4.8 6 6l2.1-2.1 4.6 3.1-1.1 3c-.3.8-1.4 1.2-2.4 1C9 19 4.2 14 2.8 6.7c-.2-1 .3-2 1.2-2.4z"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 11c0 4.5-4 7-8.7 7a14 14 0 0 1-3-.3l-6 3 1.7-5C3.7 14.4 3 12.8 3 11c0-4.4 4-7.5 9-7.5s9 3.1 9 7.5Z"/></symbol>
+<symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15 8-2 5-4 3 2-5z"/></symbol>
+</defs></svg>
+<header class="mast"><div class="mast-inner shell">
+<a class="wordmark" href="#hoje" aria-label="Prumo, ir para Hoje"><svg class="icon mark" aria-hidden="true"><use href="#i-mark"></use></svg>Prumo</a>
+<nav class="navigation" aria-label="Navegação principal">
+<a href="#hoje" data-page="hoje" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-today"></use></svg>Hoje</a>
+<a href="#salvas" data-page="salvas"><svg class="icon" aria-hidden="true"><use href="#i-bookmark"></use></svg>Salvas</a>
+<a href="#widgets" data-page="widgets"><svg class="icon" aria-hidden="true"><use href="#i-widgets"></use></svg>Widgets</a>
+<a href="#ajustes" data-page="ajustes"><svg class="icon" aria-hidden="true"><use href="#i-settings"></use></svg>Ajustes</a>
+</nav></div></header>
+<main class="shell" id="conteudo" tabindex="-1"></main>
+<noscript><article class="shell noscript"><h1>Prumo</h1><p>Feche o livro e veja o que ficou.</p><p>Abra este arquivo em um navegador com JavaScript para experimentar as telas.</p></article></noscript>
+<div class="toast" id="toast" hidden><span></span><button type="button" hidden>Desfazer</button></div>
+<div class="sr" role="status" id="announcer" aria-live="polite" aria-atomic="true"></div>
+<script type="application/json" id="catalogo">[
+  {"tema":"estudos","periodo":"manha","curta":"Feche o livro. O que ficou?","texto":"Feche o livro e veja o que ficou."},
+  {"tema":"estudos","periodo":"tarde","curta":"Explique a ideia com suas palavras.","texto":"Explique a ideia com suas palavras antes de voltar ao texto."},
+  {"tema":"estudos","periodo":"noite","curta":"Que pergunta fica na margem?","texto":"Deixe uma pergunta na margem para a leitura de amanhã."},
+  {"tema":"estudos","periodo":"madrugada","curta":"Deixe a página marcada.","texto":"O livro pode esperar com a página marcada."},
+  {"tema":"trabalho","periodo":"manha","curta":"Qual entrega vem primeiro?","texto":"Escolha a entrega que merece o primeiro horário livre."},
+  {"tema":"trabalho","periodo":"tarde","curta":"Que urgência merece sua tarde?","texto":"Nem toda urgência merece a sua tarde."},
+  {"tema":"trabalho","periodo":"noite","curta":"Anote onde você parou.","texto":"Uma linha sobre onde você parou já prepara a retomada."},
+  {"tema":"trabalho","periodo":"madrugada","curta":"Anote o assunto para amanhã.","texto":"Uma nota no papel pode guardar o assunto até amanhã."},
+  {"tema":"empreender","periodo":"manha","curta":"O que você quer descobrir?","texto":"Antes de abrir a planilha, escolha o que quer descobrir."},
+  {"tema":"empreender","periodo":"tarde","curta":"Como a pessoa resolveu isso antes?","texto":"Pergunte como a pessoa resolveu o problema da última vez."},
+  {"tema":"empreender","periodo":"noite","curta":"Que pista ficou da recusa?","texto":"Uma recusa bem ouvida sugere o próximo teste."},
+  {"tema":"empreender","periodo":"madrugada","curta":"A ideia anotada pode esperar.","texto":"A ideia ficou anotada e pode esperar até de manhã."},
+  {"tema":"treino","periodo":"manha","curta":"Qual horário cabe no seu dia?","texto":"Escolha um horário de treino que caiba no dia que você tem."},
+  {"tema":"treino","periodo":"tarde","curta":"Cuide também da próxima série.","texto":"A próxima série merece a mesma atenção da primeira."},
+  {"tema":"treino","periodo":"noite","curta":"Que movimento merece atenção?","texto":"Anote o movimento que merece mais atenção no próximo treino."},
+  {"tema":"treino","periodo":"madrugada","curta":"O descanso também faz parte do treino.","texto":"Seu plano de treino também tem noites de sono."}
+]</script>
+<script>
+(() => {
+  'use strict';
+  const themes = {estudos:"Estudos", trabalho:"Trabalho", empreender:"Empreendedorismo", treino:"Academia"};
+  const periods = {manha:"Manhã", tarde:"Tarde", noite:"Noite", madrugada:"Madrugada"};
+  const themeKeys = Object.keys(themes);
+  const periodKeys = Object.keys(periods);
+  const byTime = ["madrugada","manha","tarde","noite"];
+  const periodIcons = {manha:"manha", tarde:"today", noite:"noite", madrugada:"madrugada"};
+  const defaultTimes = {manha:"06:00", tarde:"12:00", noite:"18:00", madrugada:"00:00"};
+  const routeNames = {hoje:"Hoje", salvas:"Salvas", widgets:"Widgets", ajustes:"Ajustes"};
+  const formats = {
+    bloqueio:{tab:"Bloqueio", name:"Tela Bloqueada", icon:"lock", note:"A versão curta aparece abaixo do relógio, à esquerda. A imagem de fundo é a que você escolhe no iPhone."},
+    pequeno:{tab:"Pequeno", name:"Widget pequeno", icon:"small", note:"Um quadrado na Tela de Início reúne o período e a versão curta da frase."},
+    medio:{tab:"Médio", name:"Widget médio", icon:"medium", note:"O formato mais largo dá espaço à frase completa e ao tema, na Tela de Início."}
+  };
+  const storageKey = "prumo.prototipo.v1";
+  const dayMs = 86400000;
+  const localDay = date => Math.trunc(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / dayMs);
+  const localClock = date => `${String(date.getHours()).padStart(2,"0")}:${String(date.getMinutes()).padStart(2,"0")}`;
+  const timeValid = value => typeof value === "string" && /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value);
+  const validTimes = value => value && byTime.every((p,i) => timeValid(value[p]) && (!i || value[byTime[i-1]] < value[p]));
+  const timeLabel = value => value.slice(0,2)+"h"+(value.endsWith(":00") ? "" : value.slice(3));
+  const mod = (a,n) => ((a%n)+n)%n;
+  const escape = value => String(value).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[ch]);
+  const icon = (name, extra="") => `<svg class="icon ${extra}" aria-hidden="true"><use href="#i-${name}"></use></svg>`;
+  const upperFirst = string => string[0].toUpperCase()+string.slice(1);
+  const dateLong = new Intl.DateTimeFormat("pt-BR",{weekday:"long",day:"numeric",month:"long"});
+  const dateShort = new Intl.DateTimeFormat("pt-BR",{day:"2-digit",month:"short"});
+  const lockDateFormatter = new Intl.DateTimeFormat("pt-BR",{weekday:"short",day:"numeric",month:"short"});
+  const main = document.getElementById("conteudo");
+  const status = document.getElementById("announcer");
+  const toast = document.getElementById("toast");
+  let announcement = 0, toastTimer, undoAction = null, storageAvailable = true;
+
+  function stableId(item) {
+    let hash = 2166136261;
+    for (const char of item.texto.normalize("NFC")) {
+      hash ^= char.codePointAt(0);
+      hash = Math.imul(hash,16777619);
+    }
+    return `${item.tema}.${item.periodo}.${(hash>>>0).toString(36)}`;
+  }
+  const catalog = JSON.parse(document.getElementById("catalogo").textContent)
+    .filter(item => Object.hasOwn(themes,item.tema) && Object.hasOwn(periods,item.periodo) && item.texto && item.curta)
+    .map(item => ({...item,id:stableId(item)}));
+  const byId = new Map(catalog.map(item => [item.id,item]));
+  const groups = Object.fromEntries(periodKeys.map(p => [p, Object.fromEntries(themeKeys.map(t => [t, catalog.filter(x => x.periodo===p && x.tema===t)]))]));
+  function getState() {
+    const defaults = {themes:[...themeKeys],times:{...defaultTimes},reminders:false,baseDay:localDay(new Date()),saved:[]};
+    let raw;
+    try { raw = JSON.parse(localStorage.getItem(storageKey) || "null"); }
+    catch (error) { if (error.name !== "SyntaxError") storageAvailable = false; }
+    if (!raw || typeof raw !== "object") return defaults;
+    const enabled = Array.isArray(raw.themes) ? themeKeys.filter(t => raw.themes.includes(t)) : [];
+    const seen = new Set();
+    const saved = Array.isArray(raw.saved) ? raw.saved.filter(entry => {
+      if (!entry || !byId.has(entry.id) || !Number.isFinite(entry.when) || Math.abs(entry.when)>8.64e15 || seen.has(entry.id)) return false;
+      seen.add(entry.id); return true;
+    }) : [];
+    return {themes:enabled.length ? enabled : defaults.themes, times:validTimes(raw.times) ? {...raw.times} : defaults.times,
+      reminders:raw.reminders === true, baseDay:Number.isSafeInteger(raw.baseDay) ? raw.baseDay : defaults.baseDay, saved};
+  }
+  let state = getState();
+  function writeState() {
+    try { localStorage.setItem(storageKey, JSON.stringify(state)); storageAvailable = true; }
+    catch { storageAvailable = false; }
+  }
+  writeState();
+  let route = readRoute();
+  let selectedPeriod = null, widgetFormat = "bloqueio", lastDay = null, lastLive = null, wallpaperArt;
+  function readRoute() {
+    const hash = location.hash.slice(1);
+    return Object.hasOwn(routeNames,hash) ? hash : "hoje";
+  }
+  function getView(now = new Date()) {
+    const clock = localClock(now), day = localDay(now);
+    let live = "noite";
+    for (const p of byTime) if (clock >= state.times[p]) live = p;
+    const period = selectedPeriod || live;
+    const phraseDay = period === live && clock < state.times.madrugada ? day-1 : day;
+    const delta = phraseDay-state.baseDay;
+    const enabled = state.themes.filter(t => groups[period][t].length);
+    const index = delta+periodKeys.indexOf(period);
+    const theme = enabled[mod(index,enabled.length)];
+    const pool = groups[period][theme];
+    const item = pool[mod(Math.floor(index/enabled.length),pool.length)];
+    return {now, clock, day, live, period, item, phraseDay, liveView:period===live,
+      shownClock:period===live ? clock : state.times[period]};
+  }
+  function announce(message) {
+    const id = ++announcement;
+    status.textContent = "";
+    requestAnimationFrame(() => {if (id===announcement) status.textContent=message;});
+  }
+  function notify(message, undo=null) {
+    clearTimeout(toastTimer); undoAction=undo;
+    toast.querySelector("span").textContent=message;
+    toast.querySelector("button").hidden=!undo;
+    toast.hidden=false;
+    announce(message+(undo ? " É possível desfazer." : ""));
+    toastTimer=setTimeout(() => {toast.hidden=true;undoAction=null;},undo?9000:3300);
+  }
+  toast.querySelector("button").addEventListener("click", () => {if (undoAction) undoAction();});
+  function pageHead(name, kicker, right="") {
+    return `<header class="pagehead"><div><p class="kicker">${escape(kicker)}</p><h1 id="page-title" tabindex="-1">${name}</h1></div>${right}</header>`;
+  }
+  const saveExists = item => state.saved.some(s => s.id===item.id);
+  function reading(v) {
+    const item=v.item, p=v.period, next=byTime[(byTime.indexOf(p)+1)%byTime.length], saved=saveExists(item);
+    const end=timeLabel(state.times[next]), start=timeLabel(state.times[p]);
+    const timeDescription=v.phraseDay<v.day ? "Desde ontem" : (v.liveView ? "Período atual" : "Prévia do período");
+    return `<article class="reading" aria-label="Frase de ${escape(periods[p])}">
+      <div class="reading-top"><span class="period-name">${icon(periodIcons[p])}${periods[p]}</span><span class="reading-range" aria-label="${timeDescription}, das ${start} às ${end}">${start} – ${end}</span></div>
+      <canvas class="celestial" data-period="${p}" width="248" height="170" aria-hidden="true"></canvas>
+      <div class="reading-body"><blockquote${item.texto.length>80?' class="long"':""}>${escape(item.texto)}</blockquote></div>
+      <footer class="reading-foot"><span class="reading-theme">${icon(item.tema)}${themes[item.tema]}</span>
+      <button class="save-button" id="save-current" data-save="${item.id}" type="button" aria-pressed="${saved}" aria-label="${saved?"Remover frase das salvas":"Salvar frase"}">${icon(saved?"saved":"bookmark")}${saved?"Salva":"Salvar frase"}</button></footer></article>`;
+  }
+  function periodMenu(v) {
+    return `<section class="periods" aria-labelledby="periods-title"><div class="periods-head"><h2 class="subhead" id="periods-title">Períodos do dia</h2><span class="period-status">Agora · ${periods[v.live]}</span></div>
+      <div class="period-options" role="group" aria-label="Escolher período para leitura">${periodKeys.map(p => `<button type="button" class="period-option" id="period-${p}" data-period="${p}" aria-pressed="${v.period===p}" aria-label="${periods[p]}, a partir das ${timeLabel(state.times[p])}${p===v.live?", período atual":""}">
+      <span class="option-head">${periods[p]}</span><span class="option-time">${timeLabel(state.times[p])}</span></button>`).join("")}</div></section>`;
+  }
+  function phoneDate(now) {
+    return upperFirst(lockDateFormatter.format(now).replaceAll(".",""));
+  }
+  const domesticApps = [
+    ["calendar","Calendário"],["note","Notas"],["camera","Câmera"],["clock","Relógio"],
+    ["music","Música"],["map","Mapas"],["mail","Mail"],["home","Casa"]
+  ];
+  function homeApps() {
+    return domesticApps.map(([name,title],i) => `<div class="app-icon tone-${i%4}"><div class="app-glyph">${icon(name)}</div>${title}</div>`).join("");
+  }
+  function device(mode,v) {
+    const item=v.item, home=mode!=="bloqueio", p=v.period;
+    const widgetText=mode==="medio" ? item.texto : item.curta;
+    const figureLabel=mode==="bloqueio" ? `Prévia da Tela Bloqueada. Às ${v.shownClock}, o widget abaixo do relógio, à esquerda, mostra ${periods[p]}. ${widgetText}` :
+      `Prévia da Tela de Início com widget ${mode==="medio"?"médio":"pequeno"} de ${periods[p]}. ${widgetText}`;
+    const statusIcons=`<span class="island"></span><span class="signal">${icon("wifi")}${icon("battery","battery")}</span>`;
+    let body;
+    if (!home) {
+      body=`<div class="lock-date">${escape(phoneDate(v.now))}</div><div class="lock-clock" data-preview-clock>${v.shownClock}</div>
+        <div class="accessory"><strong>Prumo · ${periods[p]}</strong>${escape(widgetText)}</div>
+        <span class="torch left">${icon("flash")}</span><span class="torch right">${icon("camera")}</span>`;
+    } else {
+      const dock=["phone","chat","compass","music"].map((n,i) => `<span class="app-icon tone-${i}"><span class="app-glyph">${icon(n)}</span></span>`).join("");
+      body=`<span class="home-status" data-preview-clock>${v.shownClock}</span><div class="home-grid"><div class="ios-widget ${mode==="medio"?"medium":"small"}">
+        <span class="ios-label">${icon(periodIcons[p])}${periods[p]}</span><span class="ios-quote">${escape(widgetText)}</span><span class="ios-topic">${mode==="medio"?themes[item.tema]:"Prumo"}</span>
+        </div>${homeApps()}</div><span class="home-dots"><i></i><i></i><i></i></span><div class="home-dock">${dock}</div>`;
+    }
+    return `<div class="device" role="img" aria-label="${escape(figureLabel)}"><div class="device-screen" aria-hidden="true"><canvas class="wallpaper" width="414" height="850"></canvas>${statusIcons}${body}<span class="gesture"></span></div></div>`;
+  }
+  function today(v) {
+    const right=`<span class="local-clock">${icon("clock")}<span>Hora local · <span data-live-clock>${v.clock}</span></span></span>`;
+    return pageHead("Hoje",dateLong.format(v.now),right)+`<div class="today-grid">${reading(v)}${periodMenu(v)}
+      <aside class="preview-panel" aria-labelledby="teaser-title"><div class="preview-heading"><p class="kicker">Prévia do widget</p><h2 class="subhead" id="teaser-title">Tela Bloqueada</h2></div>
+      <div class="teaser-stage">${device("bloqueio",v)}</div><a class="preview-link" data-open-preview href="#widgets">Ver widgets ${icon("arrow")}</a></aside></div>`;
+  }
+  function savedPage() {
+    const count=state.saved.length;
+    let out=pageHead("Salvas",count ? `${count} ${count===1?"frase":"frases"} na coleção`:"Sua coleção");
+    if (!count) return out+`<section class="page-empty"><div class="empty-icon" aria-hidden="true">${icon("bookmark")}</div><h2>Nenhuma frase salva</h2><p>Use o marcador em Hoje para guardar uma frase aqui.</p><a class="button-solid" href="#hoje">Ver frase de hoje ${icon("arrow")}</a></section>`;
+    const items=[...state.saved].sort((a,b) => b.when-a.when);
+    return out+`<ul class="saved-list">${items.map(s => {
+      const item=byId.get(s.id);
+      return `<li class="saved-item"><div><p class="saved-meta">${escape(dateShort.format(new Date(s.when)))} <span aria-hidden="true">·</span> ${periods[item.periodo]} <span aria-hidden="true">·</span> ${themes[item.tema]}</p>
+        <blockquote>${escape(item.texto)}</blockquote></div><button type="button" class="remove" data-remove="${item.id}" aria-label="Remover das salvas: ${escape(item.texto)}" title="Remover das salvas">${icon("saved")}</button></li>`;}).join("")}</ul>`;
+  }
+  function widgetsPage(v) {
+    const f=formats[widgetFormat], lock=widgetFormat==="bloqueio";
+    const steps=lock ? [
+      "Mantenha a Tela Bloqueada pressionada e toque em <strong>Personalizar</strong>.",
+      "Escolha <strong>Tela Bloqueada</strong> e toque na área de widgets abaixo da hora.",
+      "Selecione <strong>Prumo</strong>, escolha o widget retangular e conclua a edição."
+    ]:[
+      "Mantenha uma área vazia da Tela de Início pressionada.",
+      "Toque em <strong>Editar</strong> e depois em <strong>Adicionar Widget</strong>.",
+      `Busque <strong>Prumo</strong>, escolha o tamanho ${widgetFormat==="pequeno"?"pequeno":"médio"} e toque em <strong>Adicionar Widget</strong>. Confirme em <strong>OK</strong>.`
+    ];
+    return pageHead("Widgets","No iPhone")+`<div class="widget-tabs" role="group" aria-label="Formato de widget">${Object.entries(formats).map(([k,o]) =>
+      `<button type="button" id="format-${k}" data-format="${k}" aria-pressed="${k===widgetFormat}">${icon(o.icon)}${o.tab}</button>`).join("")}</div>
+      <div class="widget-grid"><div class="widget-stage">${device(widgetFormat,v)}</div>
+      <section class="guide" aria-labelledby="format-title"><p class="kicker">${lock?"Acessório retangular":"Tela de Início"}</p><h2 id="format-title">${f.name}</h2>
+      <p class="guide-intro">${f.note}</p><h3>Como adicionar no iPhone</h3><ol class="steps">${steps.map(s=>`<li>${s}</li>`).join("")}</ol>
+      <p class="guide-note">Prévia interativa. A galeria de widgets do iPhone exige que o app nativo esteja instalado.</p></section></div>`;
+  }
+  function settingsPage() {
+    return pageHead("Ajustes","Preferências de leitura")+`<form id="prefs-form" novalidate><div class="settings-grid">
+      <section class="setting-card" aria-labelledby="topics-title"><h2 id="topics-title">Temas</h2><p class="setting-help" id="topics-help">Escolha pelo menos um para suas leituras.</p>
+      <div class="theme-boxes" role="group" aria-labelledby="topics-title" aria-describedby="topics-help">${themeKeys.map(t =>
+        `<label class="theme-box">${icon(t)}<span>${themes[t]}</span><input type="checkbox" name="theme" value="${t}" ${state.themes.includes(t)?"checked":""}></label>`).join("")}</div></section>
+      <section class="setting-card times-card" aria-labelledby="times-title"><h2 id="times-title">Horários</h2><p class="setting-help" id="times-help">Cada período começa na hora local escolhida.</p>
+      ${periodKeys.map(p=>`<div class="time-row"><label for="time-${p}">${icon(periodIcons[p])}${periods[p]}</label><input id="time-${p}" aria-describedby="times-help settings-error" type="time" step="60" value="${state.times[p]}" required></div>`).join("")}</section>
+      <section class="setting-card notice-card" aria-labelledby="notice-title"><label class="switch-row"><span id="notice-title" class="subhead">Lembretes</span><input type="checkbox" id="reminders" role="switch" aria-label="Lembretes" aria-describedby="notice-help" ${state.reminders?"checked":""}></label>
+      <p class="setting-help" id="notice-help">No app nativo, um aviso marca a virada de cada período. A madrugada fica sempre em silêncio.</p></section>
+      </div><div class="form-actions"><button type="submit" id="save-prefs" class="button-solid">Salvar ajustes ${icon("arrow")}</button><p id="settings-error" role="alert"></p></div>
+      ${storageAvailable?"":'<p class="storage-note">Neste navegador, as preferências e frases salvas duram apenas nesta sessão.</p>'}</form>`;
+  }
+  function makeWallpaper() {
+    const c=document.createElement("canvas"); c.width=414; c.height=850;
+    const x=c.getContext("2d"); if (!x) return null;
+    const w=c.width,h=c.height;
+    const sky=x.createLinearGradient(0,0,0,h);
+    [[0,"#203d3b"],[.18,"#365752"],[.38,"#63837a"],[.54,"#a4af94"],[.69,"#bbb294"],[1,"#3a5349"]].forEach(([p,col])=>sky.addColorStop(p,col));
+    x.fillStyle=sky;x.fillRect(0,0,w,h);
+    const light=x.createRadialGradient(w*.13,h*.53,0,w*.13,h*.53,w*.85);
+    light.addColorStop(0,"rgba(238,217,160,.47)");light.addColorStop(.5,"rgba(211,203,161,.14)");light.addColorStop(1,"rgba(244,225,188,0)");
+    x.fillStyle=light;x.fillRect(0,0,w,h);
+    function line(points,t,seed) {
+      const index=Math.min(points.length-2,Math.floor(t*(points.length-1)));
+      const mix=t*(points.length-1)-index;
+      const smooth=mix*mix*(3-2*mix);
+      return points[index]+(points[index+1]-points[index])*smooth+
+        .005*Math.sin(t*27+seed)+.003*Math.sin(t*69+seed*7)+.0019*Math.sin(t*173+seed*3)+.0008*Math.sin(t*313+seed);
+    }
+    const layers=[
+      [[.55,.53,.50,.515,.46,.48,.44,.43,.40],"#9cae99","#899c89"],
+      [[.56,.58,.55,.49,.49,.44,.45,.43,.39],"#889d8a","#738d7c"],
+      [[.53,.54,.56,.545,.565,.52,.48,.46,.465],"#6c887c","#648074"],
+      [[.59,.60,.585,.57,.52,.535,.51,.535,.50],"#546f63","#779081"],
+      [[.555,.58,.60,.62,.625,.63,.60,.575,.555],"#536f62","#4c6357"],
+      [[.60,.64,.655,.67,.68,.64,.61,.58,.575],"#3f5c51","#3e5b50"],
+      [[.66,.69,.71,.69,.67,.68,.66,.645,.62],"#476356","#334d43"],
+      [[.75,.72,.705,.73,.75,.755,.72,.70,.68],"#354f43","#324b40"],
+      [[.78,.80,.79,.81,.775,.74,.73,.695,.71],"#2b443a","#213a32"],
+      [[.87,.86,.84,.82,.82,.83,.855,.86,.835],"#243a31","#182d27"]
+    ];
+    layers.forEach(([points,top,bottom],i)=>{
+      const g=x.createLinearGradient(0,h*Math.min(...points),0,h);
+      g.addColorStop(0,top);g.addColorStop(1,bottom);x.fillStyle=g;
+      x.beginPath(); x.moveTo(0,h);
+      for(let px=0;px<=w;px+=1) x.lineTo(px,h*line(points,px/w,i+1));
+      x.lineTo(w,h);x.closePath();x.fill();
+    });
+    const frame=x.getImageData(0,0,w,h), a=frame.data;
+    let seed=234733;
+    for(let i=0;i<a.length;i+=4) {
+      seed=(Math.imul(seed,1664525)+1013904223)>>>0;
+      const noise=((seed>>>26)-31)*.128;
+      a[i]+=noise;a[i+1]+=noise;a[i+2]+=noise;
+    }
+    x.putImageData(frame,0,0);return c;
+  }
+  function renderEmblem(el) {
+    const c=el.getContext("2d"); if(!c)return;
+    const p=el.dataset.period;
+    c.scale(2,2); c.lineCap="round"; c.lineJoin="round";
+    function path(points,color,width=.8) {
+      c.beginPath();points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));
+      c.strokeStyle=color;c.lineWidth=width;c.stroke();
+    }
+    function circle(x,y,r,color,from=0,to=Math.PI*2) {
+      c.beginPath();c.arc(x,y,r,from,to);c.strokeStyle=color;c.lineWidth=.9;c.stroke();
+    }
+    const tint="#d4cfa1", dim="#9aab89", faint="#799781";
+    const horizon=62;
+    for(let i=0;i<4;i++) {
+      const y=horizon+i*3.3;
+      path([[15+i*9,y],[103-i*5,y]],i===0?dim:faint,i===0?.8:.55);
+    }
+    if(p==="manha" || p==="tarde") {
+      const cx=69, cy=p==="manha"?58:40, radius=p==="manha"?15:12;
+      c.save();c.beginPath();c.rect(0,0,124,horizon-.4);c.clip();
+      circle(cx,cy,radius,tint);
+      for(let k=0;k<17;k++) {
+        const a=(-165+k*20)*Math.PI/180;
+        const r=radius+4,len=k%2?4:7;
+        path([[cx+r*Math.cos(a),cy+r*Math.sin(a)],[cx+(r+len)*Math.cos(a),cy+(r+len)*Math.sin(a)]],dim,.6);
+      }
+      c.restore();
+    } else {
+      const cx=p==="noite"?78:64, cy=p==="noite"?36:32;
+      c.beginPath();c.moveTo(cx+4,cy-11);c.bezierCurveTo(cx-11,cy-10,cx-14,cy+8,cx,cy+12);
+      c.bezierCurveTo(cx+6,cy+13,cx+9,cy+11,cx+11,cy+7);c.bezierCurveTo(cx-1,cy+9,cx-5,cy-4,cx+4,cy-11);
+      c.strokeStyle=tint; c.lineWidth=1;c.stroke();
+      for(const [sx,sy,r] of [[43,33,2.2],[95,19,1.9],[89,49,1.4],[54,19,.9]]) {
+        path([[sx-r,sy],[sx+r,sy]],dim,.65);path([[sx,sy-r],[sx,sy+r]],dim,.65);
+      }
+    }
+    path([[25,55],[37,53],[49,55],[61,52]],faint,.55);
+  }
+  function paint() {
+    const phones=main.querySelectorAll(".wallpaper");
+    if(phones.length && !wallpaperArt) wallpaperArt=makeWallpaper();
+    if(wallpaperArt) phones.forEach(el=>el.getContext("2d")?.drawImage(wallpaperArt,0,0));
+    main.querySelectorAll(".celestial").forEach(renderEmblem);
+  }
+  function render(options={}) {
+    const v=getView();
+    lastDay=v.day;lastLive=v.live;
+    document.title=`${routeNames[route]} · Prumo`;
+    document.querySelectorAll("[data-page]").forEach(a=>{
+      if (a.dataset.page===route) a.setAttribute("aria-current","page");
+      else a.removeAttribute("aria-current");
+    });
+    if(route==="hoje") main.innerHTML=today(v);
+    if(route==="salvas") main.innerHTML=savedPage();
+    if(route==="widgets") main.innerHTML=widgetsPage(v);
+    if(route==="ajustes") main.innerHTML=settingsPage();
+    paint();
+    if(options.top) window.scrollTo(0,0);
+    if(options.target) {
+      const target=document.getElementById(options.target);
+      if(target) target.focus({preventScroll:true});
+    }
+  }
+  function removeSaved(id,source) {
+    const entry=state.saved.find(x=>x.id===id);
+    if(!entry) return;
+    state.saved=state.saved.filter(x=>x.id!==id);writeState();
+    render({target:source==="hoje"?"save-current":"page-title"});
+    notify("Frase removida das salvas.",()=>{
+      if(!state.saved.some(x=>x.id===id)) state.saved.push(entry);
+      writeState();render({target:route==="hoje"?"save-current":"page-title"});notify("Frase restaurada.");
+    });
+  }
+  function submitSettings(form) {
+    const enabled=[...form.querySelectorAll('[name="theme"]:checked')].map(i=>i.value);
+    const times=Object.fromEntries(byTime.map(p=>[p,form.elements.namedItem(`time-${p}`).value]));
+    const errorBox=document.getElementById("settings-error");
+    form.querySelectorAll('[aria-invalid]').forEach(el=>el.removeAttribute("aria-invalid"));
+    if (!enabled.length) {
+      errorBox.textContent="Escolha pelo menos um tema antes de salvar.";
+      const first=form.querySelector('[name="theme"]');first.setAttribute("aria-invalid","true");first.setAttribute("aria-describedby","settings-error");first.focus();return;
+    }
+    if (!validTimes(times)) {
+      const bad=byTime.find((p,i)=>!timeValid(times[p]) || (i>0 && times[byTime[i-1]]>=times[p]));
+      errorBox.textContent="Use horários diferentes, em ordem de madrugada, manhã, tarde e noite.";
+      const input=document.getElementById(`time-${bad}`);input.setAttribute("aria-invalid","true");input.focus();return;
+    }
+    state.themes=enabled;state.times=times;state.reminders=form.elements.namedItem("reminders").checked;
+    writeState();selectedPeriod=null;render({target:"save-prefs"});
+    notify(storageAvailable?"Ajustes salvos.":"Ajustes válidos nesta sessão.");
+  }
+  main.addEventListener("submit",e=>{
+    if(e.target.id==="prefs-form"){e.preventDefault();submitSettings(e.target);}
+  });
+  main.addEventListener("click",e=>{
+    const preview=e.target.closest("[data-open-preview]");
+    if(preview) widgetFormat="bloqueio";
+    const b=e.target.closest("button"); if(!b) return;
+    if(b.hasAttribute("data-period")){
+      const p=b.dataset.period, current=getView();
+      selectedPeriod=p===current.live?null:p;
+      render({target:`period-${p}`});const v=getView();
+      announce(`${periods[p]}. ${themes[v.item.tema]}. ${v.item.texto}`);return;
+    }
+    if(b.hasAttribute("data-save")) {
+      const id=b.dataset.save, item=byId.get(id);
+      if(!item)return;
+      if(saveExists(item)){removeSaved(id,"hoje");return;}
+      state.saved.push({id,when:Date.now()});writeState();render({target:"save-current"});
+      notify(storageAvailable?"Frase salva.":"Frase salva nesta sessão.");return;
+    }
+    if(b.hasAttribute("data-remove")) {removeSaved(b.dataset.remove,"salvas");return;}
+    if(b.hasAttribute("data-format")) {
+      widgetFormat=b.dataset.format;render({target:`format-${widgetFormat}`});announce(`Prévia. ${formats[widgetFormat].name}.`);
+    }
+  });
+  window.addEventListener("hashchange",()=>{
+    const next=readRoute();if(next===route)return;
+    route=next;toast.hidden=true;undoAction=null;clearTimeout(toastTimer);
+    render({target:"page-title",top:true});
+  });
+  document.querySelector(".skip").addEventListener("click",e=>{e.preventDefault();main.focus();main.scrollIntoView();});
+  window.addEventListener("storage",e=>{
+    if(e.key!==storageKey) return;
+    state=getState();if(route!=="ajustes")render();
+  });
+  function tick() {
+    let v=getView();
+    if(v.day!==lastDay || (v.live!==lastLive && selectedPeriod===v.live)) {selectedPeriod=null;v=getView();}
+    if((v.day!==lastDay || v.live!==lastLive) && (route==="hoje" || route==="widgets")) {
+      const focus=document.activeElement?.id;
+      render({target:focus});return;
+    }
+    lastDay=v.day;lastLive=v.live;
+    main.querySelectorAll("[data-live-clock]").forEach(el=>el.textContent=v.clock);
+    main.querySelectorAll("[data-preview-clock]").forEach(el=>el.textContent=v.shownClock);
+    const fig=main.querySelector(".device");
+    if(fig && (route==="hoje" || widgetFormat==="bloqueio")) {
+      const txt=fig.getAttribute("aria-label");
+      fig.setAttribute("aria-label",txt.replace(/Às \d\d:\d\d/,`Às ${v.shownClock}`));
+    }
+  }
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden)tick();});
+  window.addEventListener("pageshow",tick);
+  render();setInterval(tick,15000);
+})();
+</script>
+</body>
+</html>

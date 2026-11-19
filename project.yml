@@ -1,0 +1,85 @@
+# Gera Prumo.xcodeproj no macOS:  brew install xcodegen && xcodegen generate
+# Ajuste DEVELOPMENT_TEAM, PRUMO_BUNDLE_ID e PRUMO_APP_GROUP antes de assinar.
+name: Prumo
+options:
+  bundleIdPrefix: br.prumo
+  deploymentTarget:
+    iOS: "17.0"
+  developmentLanguage: pt-BR
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+settings:
+  base:
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGN_STYLE: Automatic
+    PRUMO_BUNDLE_ID: br.prumo.app
+    PRUMO_APP_GROUP: group.br.prumo.app
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "1"
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+
+packages:
+  PrumoKit:
+    path: PrumoKit
+
+targets:
+  Prumo:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+        excludes:
+          - Info.plist
+          - "*.entitlements"
+      - Compartilhado
+    dependencies:
+      - package: PrumoKit
+      - target: PrumoWidgetExtension
+    settings:
+      base:
+        PRODUCT_NAME: Prumo
+        PRODUCT_BUNDLE_IDENTIFIER: $(PRUMO_BUNDLE_ID)
+        INFOPLIST_FILE: App/Info.plist
+        CODE_SIGN_ENTITLEMENTS: App/Prumo.entitlements
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+
+  PrumoWidgetExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: Widget
+        excludes:
+          - Info.plist
+          - "*.entitlements"
+      - Compartilhado
+    dependencies:
+      - package: PrumoKit
+      - sdk: WidgetKit.framework
+      - sdk: SwiftUI.framework
+    settings:
+      base:
+        PRODUCT_NAME: PrumoWidgetExtension
+        PRODUCT_BUNDLE_IDENTIFIER: $(PRUMO_BUNDLE_ID).widget
+        INFOPLIST_FILE: Widget/Info.plist
+        CODE_SIGN_ENTITLEMENTS: Widget/PrumoWidget.entitlements
+        SKIP_INSTALL: YES
+
+schemes:
+  Prumo:
+    build:
+      targets:
+        Prumo: all
+        PrumoWidgetExtension: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - package: PrumoKit/PrumoKitTests
+    archive:
+      config: Release

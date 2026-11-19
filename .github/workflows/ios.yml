@@ -1,0 +1,37 @@
+name: iOS
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  motor-linux:
+    name: PrumoKit (Linux)
+    runs-on: ubuntu-latest
+    container: swift:6.1
+    steps:
+      - uses: actions/checkout@v4
+      - run: apt-get update && apt-get install -y libsqlite3-dev
+      - run: swift test
+        working-directory: PrumoKit
+
+  app-macos:
+    name: App e widget (macOS)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Testes do motor
+        run: swift test
+        working-directory: PrumoKit
+      - name: Gerar projeto
+        run: |
+          brew install xcodegen
+          xcodegen generate
+      - name: Compilar para o simulador (sem assinatura)
+        run: |
+          xcodebuild build \
+            -project Prumo.xcodeproj \
+            -scheme Prumo \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO
