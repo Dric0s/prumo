@@ -1,5 +1,5 @@
 # Gera Prumo.xcodeproj no macOS:  brew install xcodegen && xcodegen generate
-# Ajuste DEVELOPMENT_TEAM, PRUMO_BUNDLE_ID e PRUMO_APP_GROUP antes de assinar.
+# Debug assina no modo automático; Release usa os perfis Ad Hoc "Prumo app" e "Prumo widget".
 name: Prumo
 options:
   bundleIdPrefix: br.prumo
@@ -11,7 +11,7 @@ options:
 
 settings:
   base:
-    DEVELOPMENT_TEAM: ""
+    DEVELOPMENT_TEAM: 4T2FM5AVH3
     CODE_SIGN_STYLE: Automatic
     PRUMO_BUNDLE_ID: br.prumo.app
     PRUMO_APP_GROUP: group.br.prumo.app
@@ -47,6 +47,11 @@ targets:
         CODE_SIGN_ENTITLEMENTS: App/Prumo.entitlements
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+      configs:
+        Release:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: Apple Distribution
+          PROVISIONING_PROFILE_SPECIFIER: Prumo app
 
   PrumoWidgetExtension:
     type: app-extension
@@ -68,6 +73,11 @@ targets:
         INFOPLIST_FILE: Widget/Info.plist
         CODE_SIGN_ENTITLEMENTS: Widget/PrumoWidget.entitlements
         SKIP_INSTALL: YES
+      configs:
+        Release:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: Apple Distribution
+          PROVISIONING_PROFILE_SPECIFIER: Prumo widget
 
 schemes:
   Prumo:

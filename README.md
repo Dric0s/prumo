@@ -44,19 +44,37 @@ xcodegen generate
 open Prumo.xcodeproj
 ```
 
-Antes de rodar no iPhone, ajuste em `project.yml` (ou em Build Settings):
-
-| Ajuste | Valor atual | Observação |
-|---|---|---|
-| `DEVELOPMENT_TEAM` | vazio | Seu Team ID |
-| `PRUMO_BUNDLE_ID` | `br.prumo.app` | A extensão usa `<id>.widget` |
-| `PRUMO_APP_GROUP` | `group.br.prumo.app` | Precisa existir no portal Apple Developer, nos dois alvos |
+`project.yml` já traz o Team ID (`4T2FM5AVH3`), o bundle ID `br.prumo.app` (a extensão usa `br.prumo.app.widget`) e o App Group `group.br.prumo.app`. Debug assina no modo automático; Release assina manualmente com os perfis Ad Hoc "Prumo app" e "Prumo widget".
 
 O App Group é lido do `Info.plist` (`PrumoAppGroup`) pelo app e pela extensão, então só existe um lugar para mudar. Se ele não estiver configurado, cada processo usa o próprio Application Support e o widget deixa de enxergar as reservas do app.
 
 ### CI
 
-`.github/workflows/ios.yml` roda os testes do motor no Linux e, num runner macOS, gera o projeto e compila app e widget para o simulador sem assinatura. Serve para validar a compilação sem ter um Mac por perto.
+`.github/workflows/ios.yml` tem três jobs:
+
+- **PrumoKit (Linux)** e **App e widget (simulador)**: em todo push na `main` e em pull requests. Compilam sem assinatura.
+- **IPA assinado (Ad Hoc)**: só em disparo manual (Actions › iOS › Run workflow) ou em tag `v*`, nunca em pull request. Monta um keychain temporário, instala os perfis, arquiva em Release e publica o `.ipa` como artefato por 14 dias.
+
+### Assinatura
+
+Certificado, chave e perfis ficam fora do repositório (o `.gitignore` bloqueia `*.p12`, `*.key`, `*.cer`, `*.mobileprovision` etc.), em `~/.config/prumo/assinatura`, e chegam ao CI pelos segredos do GitHub:
+
+| Segredo | Origem |
+|---|---|
+| `IOS_DIST_CERT_BASE64` | `distribution.cer` (Apple Distribution) |
+| `IOS_DIST_KEY_BASE64` | `prumo-distribution.key` |
+| `IOS_PROFILE_APP_BASE64` | `Prumo_app.mobileprovision` |
+| `IOS_PROFILE_WIDGET_BASE64` | `Prumo_widget.mobileprovision` |
+
+Para atualizar depois de renovar um certificado ou perfil:
+
+```sh
+scripts/configurar-assinatura.sh            # lê ~/.config/prumo/assinatura
+```
+
+O script confere se a chave corresponde ao certificado e se os perfis incluem o App Group. O CI monta o `.p12` na hora, então não há senha de `.p12` guardada.
+
+Os perfis atuais são Ad Hoc (um aparelho registrado). Para TestFlight e App Store são necessários perfis do tipo App Store e um `ExportOptions` com `method` = `app-store-connect`.
 
 ## Como funciona
 

@@ -14,3 +14,17 @@ PrumoKit/.swiftpm/
 .swiftpm/
 
 .DS_Store
+
+# Assinatura Apple: nunca versionar (ficam em ~/.config/prumo/assinatura e nos segredos do GitHub)
+*.mobileprovision
+*.provisionprofile
+*.p12
+*.p8
+*.key
+*.cer
+*.pem
+*.certSigningRequest
+*.keychain
+*.keychain-db
+*.ipa
+*.xcarchive/
